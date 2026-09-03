@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="id" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Pencarian · AIS Next</title><link rel="stylesheet" href="/assets/vendor/tabler/css/tabler.min.css">
+  <link rel="stylesheet" href="/assets/css/ais-next.css">
+</head>
+<body><header th:replace="~{fragments/navigation :: topbar}"></header>
+<main class="page-wrapper"><div class="container-xl py-4">
+  <nav aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="/dashboard">Dasbor</a></li><li class="breadcrumb-item active">Pencarian</li></ol></nav>
+  <div class="page-header"><h1 class="page-title">Pencarian global</h1></div>
+  <form class="card card-sm mt-3" method="get" action="/search"><div class="card-body"><div class="input-group">
+    <label class="visually-hidden" for="search-query">Kata pencarian</label>
+    <input id="search-query" name="q" class="form-control" minlength="2" th:value="${query}" placeholder="Minimal dua karakter" required>
+    <button class="btn btn-primary" type="submit">Cari</button>
+  </div></div></form>
+  <div class="list-group mt-3" th:if="${!results.empty}">
+    <a class="list-group-item list-group-item-action" th:each="result : ${results}" th:href="${result.url}">
+      <div class="d-flex justify-content-between"><strong th:text="${result.title}">Judul</strong><span class="badge bg-dark text-white" th:text="${result.type}">Jenis</span></div>
+      <div class="text-secondary" th:text="${result.id}">ID</div>
+    </a>
+  </div>
+  <div th:if="${query.length() >= 2 && results.empty}"><div th:replace="~{fragments/status :: empty('Tidak ada hasil yang cocok')}"></div></div>
+  <div class="alert alert-secondary mt-3" role="status" th:if="${query.length() < 2}">Masukkan minimal dua karakter untuk mulai mencari.</div>
+  <p class="text-secondary mt-3">Saat ini pencarian mencakup data yang sudah dimigrasikan dan diizinkan: grup pengguna legacy.</p>
+</div></main><div id="a11y-live" class="visually-hidden" aria-live="polite"></div>
+</body></html>

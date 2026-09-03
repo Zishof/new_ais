@@ -4,10 +4,17 @@
 <header th:fragment="topbar" class="navbar navbar-expand-md d-print-none">
   <div class="container-xl">
     <a class="navbar-brand" href="/dashboard">AIS Next</a>
-    <nav aria-label="Navigasi utama">
+    <nav class="d-flex flex-wrap align-items-center" aria-label="Navigasi utama">
       <a class="nav-link" href="/dashboard">Dasbor</a>
-      <a class="nav-link" href="/roles">Grup pengguna</a>
+      <a class="nav-link" href="/profile">Profil</a>
+      <a class="nav-link" href="/roles" th:if="${canReadRoleDirectory}">Grup pengguna</a>
     </nav>
+    <form class="d-flex ms-md-auto me-2" method="get" action="/search" th:if="${canReadRoleDirectory}">
+      <label class="visually-hidden" for="global-search">Pencarian global</label>
+      <input id="global-search" class="form-control form-control-sm" name="q"
+             minlength="2" placeholder="Cari fitur atau data" required>
+      <button class="btn btn-primary btn-sm ms-1" type="submit">Cari</button>
+    </form>
     <form method="post" action="/logout">
       <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
       <button class="btn btn-outline-secondary btn-sm" type="submit">Keluar</button>

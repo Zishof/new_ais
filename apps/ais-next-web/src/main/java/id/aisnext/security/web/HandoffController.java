@@ -1,12 +1,12 @@
 package id.aisnext.security.web;
 
+import id.aisnext.identity.application.HandoffAuthorizationService;
 import id.aisnext.security.api.HandoffPrincipal;
 import id.aisnext.security.api.HandoffTokenService;
 import id.aisnext.tenant.api.TenantContext;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.List;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -19,22 +19,27 @@ import org.springframework.web.bind.annotation.RequestParam;
  * Converts a valid, one-time legacy handoff token into an AIS Next authenticated HTTP session.
  *
  * <p>The controller never accepts a tenant from request parameters. It requires the token tenant
- * to equal the trusted-host tenant established earlier in the filter chain.</p>
+ * to equal the trusted-host tenant established earlier in the filter chain, then verifies that the
+ * active legacy user owns the selected active role before creating a session.</p>
  */
 @Controller
 public class HandoffController {
     private final HandoffTokenService tokens;
     private final SecurityContextRepository repository;
+    private final HandoffAuthorizationService authorization;
 
     /**
      * Creates the handoff endpoint.
      *
      * @param tokens token verifier and nonce consumer
      * @param repository repository used to persist the new security context
+     * @param authorization legacy identity, assigned-role, and menu-capability validator
      */
-    public HandoffController(HandoffTokenService tokens, SecurityContextRepository repository) {
+    public HandoffController(HandoffTokenService tokens, SecurityContextRepository repository,
+                             HandoffAuthorizationService authorization) {
         this.tokens = tokens;
         this.repository = repository;
+        this.authorization = authorization;
     }
 
     /**
@@ -53,9 +58,17 @@ public class HandoffController {
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Token tenant does not match host tenant");
             return;
         }
-        String authority = "ROLE_" + principal.activeRoleId().replaceAll("[^A-Za-z0-9_]", "_").toUpperCase();
+        var authorized = authorization.authorize(principal);
+        if (authorized.isEmpty()) {
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED,
+                    "Legacy identity or selected role is not authorized");
+            return;
+        }
+        var authorities = authorized.orElseThrow().authorities().stream()
+                .map(SimpleGrantedAuthority::new)
+                .toList();
         var authentication = UsernamePasswordAuthenticationToken.authenticated(
-                principal, "HANDOFF", List.of(new SimpleGrantedAuthority(authority)));
+                principal, "HANDOFF", authorities);
         var context = SecurityContextHolder.createEmptyContext();
         context.setAuthentication(authentication);
         SecurityContextHolder.setContext(context);

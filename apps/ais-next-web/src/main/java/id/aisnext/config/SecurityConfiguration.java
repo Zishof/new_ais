@@ -1,5 +1,7 @@
 package id.aisnext.config;
 
+import static id.aisnext.identity.application.HandoffAuthorizationService.ROLE_DIRECTORY_READ_AUTHORITY;
+
 import id.aisnext.security.api.HandoffTokenService;
 import id.aisnext.security.api.NonceStore;
 import java.nio.charset.StandardCharsets;
@@ -61,6 +63,8 @@ public class SecurityConfiguration {
         http.authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/", "/error", "/auth/handoff", "/assets/**", "/actuator/health/**").permitAll()
                         .requestMatchers("/api/openapi.json", "/api/docs/**", "/swagger-ui/**").permitAll()
+                        .requestMatchers("/roles/**", "/api/v1/roles/**", "/search", "/api/v1/search")
+                        .hasAuthority(ROLE_DIRECTORY_READ_AUTHORITY)
                         .anyRequest().authenticated())
                 .logout(logout -> logout.logoutSuccessUrl("/"))
                 .headers(headers -> headers

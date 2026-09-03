@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="id" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Profil · AIS Next</title><link rel="stylesheet" href="/assets/vendor/tabler/css/tabler.min.css">
+  <link rel="stylesheet" href="/assets/css/ais-next.css">
+</head>
+<body><header th:replace="~{fragments/navigation :: topbar}"></header>
+<main class="page-wrapper"><div class="container-xl py-4">
+  <nav aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="/dashboard">Dasbor</a></li><li class="breadcrumb-item active">Profil</li></ol></nav>
+  <div class="page-header"><h1 class="page-title">Profil pengguna</h1></div>
+  <div class="card mt-3"><div class="card-body">
+    <dl class="row mb-0">
+      <dt class="col-sm-4">Nama</dt><dd class="col-sm-8" th:text="${account.displayName}">Nama pengguna</dd>
+      <dt class="col-sm-4">ID pengguna</dt><dd class="col-sm-8"><code th:text="${account.userId}">user</code></dd>
+      <dt class="col-sm-4">Role aktif</dt><dd class="col-sm-8" th:text="${activeRoleId}">role</dd>
+      <dt class="col-sm-4">Role tersedia</dt><dd class="col-sm-8"><span th:each="role, stat : ${account.roleIds}" th:text="${role + (stat.last ? '' : ', ')}">role</span></dd>
+      <dt class="col-sm-4">Status</dt><dd class="col-sm-8"><span th:replace="~{fragments/status :: active(${account.active})}"></span></dd>
+    </dl>
+  </div></div>
+  <div class="alert alert-info mt-3" role="status">Profil ini merupakan projection read-only dan tidak memuat password atau hash password legacy.</div>
+</div></main><div id="a11y-live" class="visually-hidden" aria-live="polite"></div>
+</body></html>
