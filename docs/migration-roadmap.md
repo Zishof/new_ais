@@ -48,6 +48,8 @@ capabilities advance only as separate audited increments.
 
 Phase 7 starts with an audited read-only directory for `akunting.grup_akun`. It intentionally moves
 no account, balance, transaction, journal, posting, closing, approval, payment, audit, or
-reconciliation behavior. Implementation and clone UAT are required before this directory becomes
-a technical candidate. Any production promotion still requires finance-owner acceptance plus
-independent security, reconciliation, operations, and target-performance evidence.
+reconciliation behavior. Implementation and clone UAT now pass, including exact authorization
+negatives, three-field response minimization, desktop/mobile accessibility, route rollback,
+same-process database recovery, and source invariance. Any production promotion still requires
+finance-owner acceptance plus independent security, reconciliation, operations, and
+target-performance evidence.

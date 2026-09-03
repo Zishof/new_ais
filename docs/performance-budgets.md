@@ -30,4 +30,8 @@ The Phase 6 artifact started in 18.390 seconds and used 88,426 KiB of a 221,184 
 heap after browser, rollback, and recovery checks. It remains within the initial local budgets,
 although the startup margin is narrower and target-environment measurement remains mandatory.
 
+The Phase 7 artifact started in 9.277 seconds and used 172,542 KiB of a 278,528 KiB committed G1
+heap after browser, rollback, and recovery checks. It passes the initial local startup and
+idle-heap budgets; target-environment load and latency measurements remain mandatory.
+
 When active tenant concurrency approaches PostgreSQL limits, put PgBouncer in transaction-pooling mode after validating prepared statements, session variables and read-only initialization. Continue bounding application pools; PgBouncer is not permission to multiply them.
