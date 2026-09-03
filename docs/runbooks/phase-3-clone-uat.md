@@ -43,3 +43,33 @@ read-only and must never inherit these values.
 The clone databases are disposable only after evidence has been retained and their exact names are
 confirmed. Removing a clone is destructive and requires an explicit cleanup decision; the source
 databases are never cleanup targets.
+
+## Live legacy compatibility rehearsal
+
+Use a complete copy of the compatible Tomcat 7 deployment under a task-specific scratch directory;
+do not edit the installed legacy runtime or source tree. Give the copy unique shutdown, HTTP, and
+HTTPS ports. Override JNDI plus every active main/streaming Hibernate fallback to the exact clone
+names, and pass credentials through local process environment or an ignored scratch properties
+file. Verify the resolved active URLs before startup.
+
+Use Java 8 with at least a 4 GiB heap for the audited dataset. A 1 GiB heap is insufficient and can
+spend several minutes rebuilding Hibernate factories before ending with `GC overhead limit
+exceeded`. Wait for the background cache executor to report that all tasks are complete before
+sending the first browser request.
+
+For the bidirectional gate:
+
+1. Record source fingerprints and source/clone connections before starting Tomcat.
+2. Reach the public page, open the login form, and authenticate with a clone-only fixture.
+3. Select the role that owns menu 881247 and launch `Jenis Sekolah` through the main menu, not by a
+   raw URL, so legacy privilege context is populated.
+4. Create a uniquely named row through AIS Next, reload the ZK page, and prove the exact value is
+   visible.
+5. Create a second uniquely named row through the ZK modal and prove the authenticated AIS Next API
+   returns it.
+6. Delete both unreferenced fixtures through AIS Next with current ETags and require HTTP 204.
+7. Recheck that source and clone business fingerprints match and that no application JDBC session
+   appeared on either source database.
+
+Legacy startup can run self-healing DDL/data routines. This is permitted only on disposable clones
+and is another reason never to direct a legacy rehearsal at `ais` or `streaming_ais`.

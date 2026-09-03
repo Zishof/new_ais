@@ -18,6 +18,8 @@ is enabled only for the isolated `uat-local` clone; the normal `local` tenant re
 returns 404 for organization routes. The slice includes server-side paging/filter/sort, independent
 legacy privileges, optimistic ETags, Envers-compatible atomic audit, and bounded Excel flow.
 
-Phase 3 is not production-complete. Product-owner acceptance, a running ZK/cache reverse-visibility
-test, an independent control-audit/outbox design, and remediation/re-measurement of cold startup
-remain exit gates.
+Phase 3 is not production-complete. The isolated live ZK compatibility rehearsal now proves both
+Next-to-ZK and ZK-to-Next UI visibility with API cleanup and source-database isolation. Product-owner
+acceptance, an independent control-audit/outbox design, and remediation/re-measurement of AIS Next
+cold startup remain exit gates. Legacy deployment sizing must also retain the measured 4 GiB heap
+floor and roughly 130-second cold-start allowance for this dataset.

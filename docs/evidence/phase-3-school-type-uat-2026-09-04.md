@@ -4,11 +4,13 @@
 
 The technical UAT candidate passed on an isolated PostgreSQL clone pair. AIS Next reached the
 dashboard through the one-time handoff and rendered the `Jenis sekolah` home/list page on desktop
-and mobile. The source `ais` and `streaming_ais` databases were not modified.
+and mobile. A live isolated legacy ZK runtime also reached its public home, login page,
+authenticated dashboard, and `Jenis Sekolah` page. Bidirectional UI visibility passed. The source
+`ais` and `streaming_ais` databases were not modified.
 
-This evidence does not approve production rollout. The business UAT signature, live legacy ZK
-cache/UI reverse-visibility test, independent control-audit/outbox design, and cold-start budget
-remain open gates.
+This evidence does not approve production rollout. The business UAT signature, independent
+control-audit/outbox design, and AIS Next cold-start budget remain open gates. The legacy runtime
+also needs at least 4 GiB heap for this dataset; a 1 GiB rehearsal exhausted the heap.
 
 ## Exact environment and artifact
 
@@ -20,6 +22,9 @@ remain open gates.
 - FILE clone: `streaming_ais_next_uat_clone_20260904`
 - JAR SHA-256: `428DF4189E690441F0809DE944DFE5A268166A4FE2882569F6BD16FABA3F77CF`
 - Running evidence process after rollback restart: PID 12172
+- Legacy compatibility runtime: Java 8 / Tomcat 7.0.109 at `http://localhost:18080/ais`
+- Isolated legacy runtime: `C:\opt\NEW_AIS\.scratch\legacy-zk-uat-20260904`
+- Legacy runtime process: PID 25328 with `-Xmx4096m -XX:+UseG1GC`
 
 The database password and handoff signing key were supplied only through process environment and
 are not stored in the repository.
@@ -46,7 +51,9 @@ Final routing state:
 
 The clone-only authorization fixture activates role `amp` and assigns it to
 `admin.user_role2`. Direct verification confirms the source still has inactive `amp` and a blank
-`admin.user_role2`.
+`admin.user_role2`. A separate clone-only `aisnext_uat` user was added after legacy warm-up for the
+browser login rehearsal; it uses role `amp` and does not exist in source `ais`. Its temporary
+credential is retained only in the local UAT clone and scratch automation, never in this repository.
 
 Temporary custom-format dumps could not be removed because the host blocked the destructive file
 operation. They remain at `C:\opt\NEW_AIS\.scratch\phase3-clone-20260904`. The verified Excel
@@ -64,10 +71,12 @@ Manual authenticated API rehearsal returned:
 - delete/cleanup of the UAT-created unreferenced row: HTTP 204.
 
 The create/update/delete sequence produced exactly one Envers row of each revision type (0, 1,
-2), used consecutive shared revisions 5121970–5121972, and left no business fixture row. The final
-clone contains 24 audit snapshots: six creates, twelve updates, and six deletes. This includes
-manual UAT, the six-row atomic Excel round trip, and cleaned-up desktop/mobile Playwright fixtures.
-The source audit table remains empty.
+2), used consecutive shared revisions 5121970–5121972, and left no business fixture row. After the
+bidirectional legacy compatibility probes, the final clone contains 30 audit snapshots: nine
+creates, twelve updates, and nine deletes, spanning revisions 5121970–5122080. This includes manual
+UAT, the six-row atomic Excel round trip, cleaned-up desktop/mobile Playwright fixtures, one
+Next-to-ZK probe, and two ZK-to-Next probe attempts. The final business row count is six and the
+source audit table remains empty.
 
 Excel export returned HTTP 200, the OOXML content type, and a 4,028-byte workbook. Importing that
 export returned `{"created":0,"updated":6}` with an audit delta of exactly six and no row-count
@@ -107,6 +116,41 @@ AIS Next held two idle control connections and one idle UAT CORE connection, eac
 pool limits. Connections visible on source `ais` and `streaming_ais` belonged to pgAdmin, not AIS
 Next.
 
+## Live legacy ZK compatibility and bidirectional visibility
+
+The existing exploded legacy deployment was copied to a task-specific scratch runtime. Only that
+copy was changed: Tomcat ports became 18005/18080/18443, JNDI and active Hibernate fallbacks point
+to the clone pair, and the environment override confirms both `utama` and `streaming` factories.
+No legacy source file or installed Tomcat runtime was edited.
+
+The first cold rehearsal used a 1 GiB heap. Both Hibernate factory attempts consumed the heap and
+ended with `GC overhead limit exceeded`; the process was stopped before any source connection
+appeared. The same isolated runtime restarted with a 4 GiB G1 heap, completed its cache warm-up,
+and returned HTTP 200 from the public home within 130 seconds of process start. Browser evidence
+then proved:
+
+- public portal rendered and its `eCampus` action opened `/ais/login`;
+- the form exposed `j_username` and `j_password` and an authenticated clone-only user reached
+  `/ais/main` with no login form remaining;
+- choosing the `Admin Pesantren` (`amp`) access profile exposed menu 881247 and its create action;
+- direct legacy `Jenis Sekolah` load showed the six baseline rows;
+- AIS Next created ID 13, a legacy page reload displayed the exact fixture, and AIS Next cleanup
+  returned HTTP 204;
+- legacy ZK created ID 15 through its modal form, the AIS Next filtered API returned HTTP 200 with
+  that exact row, and AIS Next cleanup returned HTTP 204.
+
+One initial ZK-to-Next parser attempt created ID 14 but expected a `content` array instead of the
+actual `items` page field. It was independently found and removed through the authenticated AIS
+Next API with HTTP 204 before the corrected complete run. Final source and clone each contain the
+same six school types, no `UAT ZK VISIBILITY`/`ZK UAT` row, and the same five-field fingerprint
+`7cafaceff5ad8d03371ade199b30d6ba`.
+
+Legacy startup self-healing changed menu/configuration data in the clone and reported a handled
+missing `public.lampiran_lain` relation while background cache loading continued to completion.
+This is evidence that legacy UAT must remain clone-only. Final database connections were fourteen
+idle legacy JDBC sessions on the CORE clone and three on the FILE clone; source connections were
+still only the original pgAdmin sessions.
+
 ## Rollback rehearsal
 
 Both UAT organization routes were changed from `NEXT` to `LEGACY` while write ownership remained
@@ -121,9 +165,8 @@ target UAT host before Phase 3 can exit.
 ## Open production gates
 
 1. Obtain product-owner UAT acceptance for labels, validation, and Excel workflow.
-2. Start a compatible legacy ZK instance against the clone, refresh/restart its preloaded cache,
-   and prove Next-to-ZK and ZK-to-Next visibility through the actual UI.
-3. Approve a transactional outbox/reconciliation design for the independent AIS Next control audit;
+2. Approve a transactional outbox/reconciliation design for the independent AIS Next control audit;
    PostgreSQL CORE and control databases are intentionally not joined with XA.
-4. Diagnose the 27.3-second cold-start outlier and meet or amend the 20-second budget via ADR.
-5. Retain route and aggregate ownership controls; never point the writable descriptor at `ais`.
+3. Diagnose the 27.3-second AIS Next cold-start outlier and meet or amend the 20-second budget via
+   ADR; separately budget at least 4 GiB heap and approximately 130 seconds for legacy cold start.
+4. Retain route and aggregate ownership controls; never point a writable descriptor at `ais`.
