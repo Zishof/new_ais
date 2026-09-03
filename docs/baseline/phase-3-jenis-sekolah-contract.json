@@ -1,0 +1,98 @@
+{
+  "capturedAt": "2026-09-04T00:00:00+07:00",
+  "source": {
+    "database": "ais",
+    "inspectionMode": "read-only",
+    "writesExecuted": false,
+    "entity": {
+      "path": "src/main/java/ais/database/model/sekolah/JenisSekolah.java",
+      "sha256": "B72A2DEB3EAAFCB73A9D9921BBF26F826386A355928A6F57B04299BA6CF7C3B3"
+    },
+    "action": {
+      "path": "src/main/java/ais/action/master/sekolah/JenisSekolahAction.java",
+      "sha256": "1F85FC4D424607BBE1EBDE60A9011AD80968E398BF6F12D7BB678E81A99FE5BE"
+    },
+    "view": {
+      "path": "src/main/webapp/WEB-INF/z/x/y/pages/master/sekolah/jenis_sekolah.zul",
+      "sha256": "B40B3A521FE47D150F42F6DC648CBE70C987BD59DF77A18C0668D12DF0788F9C"
+    }
+  },
+  "aggregate": {
+    "key": "organization.jenis-sekolah",
+    "scope": "installation-global",
+    "tenantDiscriminatorColumn": null,
+    "legacyMenuId": 881247,
+    "legacyRoute": "/pages/master/sekolah/jenis_sekolah.zul",
+    "initialWriteOwnership": "LEGACY_WRITE",
+    "approvedUatWriteOwnership": "NEXT_WRITE",
+    "productionWriteApproved": false
+  },
+  "table": {
+    "name": "sekolah.jenis_sekolah",
+    "observedRows": 6,
+    "observedTotalSize": "32 kB",
+    "primaryKey": ["id"],
+    "idDefault": "nextval('sekolah.jenis_sekolah_id_seq'::regclass)",
+    "columns": {
+      "id": "bigint not null",
+      "keterangan": "varchar(255) null",
+      "nama": "varchar(255) not null",
+      "jenjang": "bigint null",
+      "aktif": "boolean null",
+      "oleh": "varchar(255) null",
+      "olehid": "varchar(255) null",
+      "tanggal_dirubah": "timestamp without time zone null"
+    },
+    "foreignKeys": {
+      "jenjang": "public.jenjang.id"
+    },
+    "reverseForeignKeys": {
+      "sekolah.sekolah.jenis_sekolah_id": "sekolah.jenis_sekolah.id"
+    },
+    "uniqueNameConstraint": false,
+    "databaseTriggers": [],
+    "indexes": ["primary key (id)"]
+  },
+  "audit": {
+    "mechanism": "Hibernate Envers",
+    "revisionTable": "new_audit.revinfo",
+    "entityAuditTable": "new_audit.jenis_sekolah__audit",
+    "revisionIdSource": "public.hibernate_sequence",
+    "revisionType": {
+      "create": 0,
+      "update": 1,
+      "delete": 2
+    },
+    "observedEntityAuditRows": 0,
+    "mustBeAtomicWithBusinessWrite": true
+  },
+  "authorization": {
+    "authorities": [
+      "LEGACY_MENU_881247_READ",
+      "LEGACY_MENU_881247_CREATE",
+      "LEGACY_MENU_881247_UPDATE",
+      "LEGACY_MENU_881247_DELETE"
+    ],
+    "observedRoles": ["am", "amp", "kpsk"],
+    "activeObservedRole": "am",
+    "cloneFixtureRequired": false
+  },
+  "compatibility": {
+    "newNullActiveMeansActive": true,
+    "nameRequired": true,
+    "levelRequiredByLegacyUi": true,
+    "legacyNameUniqueness": "exact, case-sensitive, trimmed comparison enforced only by the legacy UI",
+    "defaultSort": "nama ascending",
+    "nameSearch": "case-insensitive contains",
+    "deleteMayFailWhenReferenced": true,
+    "legacyCacheRefreshRequiredForLiveReverseVisibility": true
+  },
+  "writeSafety": {
+    "sourceDatabaseImmutable": true,
+    "cloneRequired": true,
+    "dualWriterForbidden": true,
+    "routeRollbackRequired": true,
+    "auditParityRequired": true,
+    "optimisticConcurrencyRequired": true
+  }
+}
