@@ -21,10 +21,12 @@ tenant remains read-only and returns 404 for Next-owned candidate routes.
 
 Phase 3 is not production-complete. The isolated live ZK compatibility rehearsal now proves both
 Next-to-ZK and ZK-to-Next UI visibility with API cleanup and source-database isolation. Product-owner
-acceptance, an independent control-audit/outbox design, and remediation/re-measurement of AIS Next
-cold startup remain exit gates. Legacy deployment sizing must also retain the measured 4 GiB heap
-floor and roughly 130-second cold-start allowance for this dataset.
+acceptance and an independent control-audit/outbox design remain exit gates. Two subsequent clean
+AIS Next starts completed in 10.686 and 10.779 seconds, clearing the local 20-second technical
+budget; target-environment measurement is still required. Legacy deployment sizing must retain the
+measured 4 GiB heap floor and roughly 130-second cold-start allowance for this dataset.
 
-Phase 4 production promotion additionally requires the attendance domain owner's parity acceptance
-and the documented database outage/recovery rehearsal. The source currently has no employee or
-daily-attendance rows, so non-empty validation is clone-only and must be cleaned up after testing.
+Phase 4 technical UAT is complete, including the documented same-process database outage/recovery
+and route rollback rehearsals. Production promotion additionally requires the attendance domain
+owner's parity acceptance. The source currently has no employee or daily-attendance rows, so its
+empty-state parity passed while non-empty validation remained clone-only and was fully cleaned up.

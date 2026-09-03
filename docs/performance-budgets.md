@@ -17,4 +17,8 @@ These are starting gates, not measured production promises. Capture a baseline o
 
 Record startup, heap, pool counts, active/idle connections, p50/p95/p99, SQL count, payload size, first contentful response and error rate per release candidate. Do not label a run passing if the load shape, tenant count or hardware is missing from the report.
 
+Phase 4 local UAT remeasured two clean starts at 10.686 and 10.779 seconds. The final process used
+156,357 KiB of a 278,528 KiB committed G1 heap. Both pass the initial local startup and idle-heap
+budgets; they are not a substitute for target-environment release-candidate measurements.
+
 When active tenant concurrency approaches PostgreSQL limits, put PgBouncer in transaction-pooling mode after validating prepared statements, session variables and read-only initialization. Continue bounding application pools; PgBouncer is not permission to multiply them.

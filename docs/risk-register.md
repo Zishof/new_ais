@@ -14,3 +14,4 @@
 | R10 | Commercial dependency enters build | Low | High | Enforcer denylist, allowlist review and SBOM | Unknown/prohibited license |
 | R11 | Control-plane outage blocks handoff/routing | Medium | High | Backup, health checks, cached-safe routing policy, legacy rollback | Control DB unavailable |
 | R12 | Big-bang expectations overrun scope | Medium | High | Gated roadmap and explicit phase reporting | Cutover proposed without evidence |
+| R13 | A legacy attendance read triggers hidden repair writes | High | Critical | SELECT-only Next projection; keep synchronization/editing legacy-owned until separately audited | Any attendance GET changes a row or sequence |
