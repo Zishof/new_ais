@@ -13,13 +13,18 @@
 | 8 — Retirement | Remove legacy routes one at a time | Traffic zero, retention/archive and rollback window expired |
 
 This iteration implements Phase 0 deliverables, Phase 1 foundation, the complete Phase 2 read-only
-identity slice, and a technical Phase 3 UAT candidate for `sekolah.jenis_sekolah`. The write route
-is enabled only for the isolated `uat-local` clone; the normal `local` tenant remains read-only and
-returns 404 for organization routes. The slice includes server-side paging/filter/sort, independent
-legacy privileges, optimistic ETags, Envers-compatible atomic audit, and bounded Excel flow.
+identity slice, and a technical Phase 3 UAT candidate for `sekolah.jenis_sekolah`. It also starts
+Phase 4 with the audited, read-only daily employee-attendance monitor. The attendance increment
+explicitly excludes the legacy page's render-time repair writes until their aggregate ownership is
+understood. Write routes are enabled only for the isolated `uat-local` clone; the normal `local`
+tenant remains read-only and returns 404 for Next-owned candidate routes.
 
 Phase 3 is not production-complete. The isolated live ZK compatibility rehearsal now proves both
 Next-to-ZK and ZK-to-Next UI visibility with API cleanup and source-database isolation. Product-owner
 acceptance, an independent control-audit/outbox design, and remediation/re-measurement of AIS Next
 cold startup remain exit gates. Legacy deployment sizing must also retain the measured 4 GiB heap
 floor and roughly 130-second cold-start allowance for this dataset.
+
+Phase 4 production promotion additionally requires the attendance domain owner's parity acceptance
+and the documented database outage/recovery rehearsal. The source currently has no employee or
+daily-attendance rows, so non-empty validation is clone-only and must be cleaned up after testing.

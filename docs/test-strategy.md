@@ -31,6 +31,13 @@
 - Privilege-negative, optimistic concurrency, audit-equivalence and rollback tests.
 - Product owner UAT signature and current artifact hash.
 
-The technical clone UAT now satisfies all automated items above. Production promotion remains
-blocked on product-owner sign-off, live ZK/cache reverse-visibility evidence, independent
-control-audit/outbox design, and the cold-start performance outlier.
+The technical clone UAT now satisfies all automated items above, including live ZK/cache
+reverse-visibility evidence in both directions. Production promotion remains blocked on
+product-owner sign-off, independent control-audit/outbox design, and the cold-start performance
+outlier.
+
+The Phase 4 attendance increment adds parameterized projection tests, source empty-state parity,
+clone-only recorded/unrecorded fixtures, deterministic duplicate selection, exact menu-authority
+negatives, responsive accessibility, explicit no-write verification, and a CORE database
+outage/recovery rehearsal. Full attendance editing and render-time repair behavior remain legacy
+owned and are outside this read-only contract.

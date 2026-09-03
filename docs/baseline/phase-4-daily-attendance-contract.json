@@ -1,0 +1,56 @@
+{
+  "capturedAt": "2026-09-04",
+  "database": "ais",
+  "discoveryReadOnly": true,
+  "legacyMenu": {
+    "id": 10000269,
+    "label": "Absensi Kehadiran Pegawai Harian",
+    "url": "/pages/master/absensi_kehadiran_pegawai_harian.zul",
+    "readAuthority": "LEGACY_MENU_10000269_READ",
+    "observedRolePrivileges": {
+      "Akademik": ["READ", "CREATE", "UPDATE", "DELETE"],
+      "am": ["READ", "CREATE", "UPDATE", "DELETE"],
+      "maha": []
+    }
+  },
+  "nextRoutes": [
+    "/attendance/daily",
+    "/api/v1/attendance/daily"
+  ],
+  "ownership": {
+    "local": {"routeOwner": "LEGACY", "writeOwnership": "LEGACY_WRITE"},
+    "uat-local": {"routeOwner": "NEXT", "writeOwnership": "NEXT_READ_ONLY"}
+  },
+  "tables": {
+    "public.pegawai": ["id", "mycode", "code", "nama", "aktif"],
+    "public.status_kehadiran_karyawan_harian": [
+      "id", "pegawai", "tanggal", "statusabsensi", "masuk_jam", "pulang_jam",
+      "keterangan_absen"
+    ],
+    "public.statusabsensi": ["id", "kode", "nama"]
+  },
+  "query": {
+    "date": "required ISO local date at the application boundary",
+    "filter": "case-insensitive contains match on employee name, mycode, or code",
+    "recordStates": ["ALL", "RECORDED", "UNRECORDED"],
+    "duplicateRule": "greatest attendance id for employee and date",
+    "sort": ["lower(coalesce(employee name, ''))", "employee id"],
+    "maximumPageSize": 100
+  },
+  "responseFields": [
+    "employeeId", "employeeNumber", "employeeName", "employeeActive", "date",
+    "attendanceId", "statusCode", "statusName", "checkIn", "checkOut", "note",
+    "recordState"
+  ],
+  "baseline": {
+    "employeeRows": 0,
+    "attendanceRows": 0,
+    "attendanceStatusRows": 20,
+    "attendanceStatusFingerprint": "0ada97a9283caa5f1bae3bf4e9f65ddd",
+    "fiveRelationSchemaFingerprint": "29d2d52323fc29ad02fdd7d3d3185e06"
+  },
+  "forbiddenOnGet": [
+    "insert", "update", "delete", "sequence allocation", "autoUpdatePulangDariSejarah",
+    "shift synchronization", "payroll derivation"
+  ]
+}
