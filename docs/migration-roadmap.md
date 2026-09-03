@@ -53,3 +53,9 @@ negatives, three-field response minimization, desktop/mobile accessibility, rout
 same-process database recovery, and source invariance. Any production promotion still requires
 finance-owner acceptance plus independent security, reconciliation, operations, and
 target-performance evidence.
+
+Phase 8 retirement readiness has been assessed, but no Legacy route is eligible for removal from
+local/UAT evidence alone. The per-route runbook now requires production traffic to be zero, all
+consumers and owners to be resolved, retention/restore approval, and expiry of the rollback window.
+Until those external gates are evidenced, control rows, Legacy routes, deployments, and source data
+remain intact; no route is marked `RETIRED`.
