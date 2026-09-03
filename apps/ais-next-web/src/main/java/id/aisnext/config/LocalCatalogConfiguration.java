@@ -10,8 +10,10 @@ import id.aisnext.tenant.api.TenantDatabaseDescriptor;
 import id.aisnext.tenant.api.TenantId;
 import id.aisnext.tenant.api.TenantMode;
 import id.aisnext.tenant.api.TenantRoutePolicy;
+import id.aisnext.tenant.api.TenantWritePolicy;
 import id.aisnext.tenant.infrastructure.InMemoryTenantCatalog;
 import id.aisnext.tenant.infrastructure.InMemoryTenantRoutePolicy;
+import id.aisnext.tenant.infrastructure.InMemoryTenantWritePolicy;
 import java.time.ZoneId;
 import java.util.Locale;
 import java.util.Map;
@@ -68,6 +70,15 @@ public class LocalCatalogConfiguration {
      * @return immutable route policy for the Phase 2 identity prefixes
      */
     @Bean TenantRoutePolicy inMemoryTenantRoutePolicy() {
-        return new InMemoryTenantRoutePolicy(PhaseTwoRoutes.localNextReadOnlyDecisions());
+        return new InMemoryTenantRoutePolicy(PhaseTwoRoutes.localSafeDecisions());
+    }
+
+    /**
+     * Denies all development writes when the authoritative control plane is disabled.
+     *
+     * @return empty fail-closed aggregate write policy
+     */
+    @Bean TenantWritePolicy inMemoryTenantWritePolicy() {
+        return new InMemoryTenantWritePolicy(Map.of());
     }
 }

@@ -14,6 +14,9 @@ public final class PhaseTwoRoutes {
             "/api/v1/roles",
             "/api/v1/profile",
             "/api/v1/search");
+    private static final List<String> ORGANIZATION_WRITE_PREFIXES = List.of(
+            "/school-types",
+            "/api/v1/school-types");
 
     /** Prevents instantiation of this static route catalog. */
     private PhaseTwoRoutes() {
@@ -29,14 +32,38 @@ public final class PhaseTwoRoutes {
     }
 
     /**
+     * Returns organization prefixes reserved for the clone-only Phase 3 write slice.
+     *
+     * @return immutable list of school-type UI and API prefixes
+     */
+    public static List<String> organizationWritePrefixes() {
+        return ORGANIZATION_WRITE_PREFIXES;
+    }
+
+    /**
+     * Returns every request prefix that must have an explicit tenant route decision.
+     *
+     * @return immutable identity and organization prefix list
+     */
+    public static List<String> governedPrefixes() {
+        return java.util.stream.Stream.concat(
+                IDENTITY_READ_PREFIXES.stream(), ORGANIZATION_WRITE_PREFIXES.stream()).toList();
+    }
+
+    /**
      * Builds the non-persistent fallback decisions used when the control plane is disabled.
      *
      * @return immutable AIS Next read-only decisions for every governed prefix
      */
-    public static List<TenantRouteDecision> localNextReadOnlyDecisions() {
-        return IDENTITY_READ_PREFIXES.stream()
+    public static List<TenantRouteDecision> localSafeDecisions() {
+        List<TenantRouteDecision> identity = IDENTITY_READ_PREFIXES.stream()
                 .map(prefix -> new TenantRouteDecision(
                         "identity", prefix, RouteOwner.NEXT, WriteOwnership.NEXT_READ_ONLY, 0L))
                 .toList();
+        List<TenantRouteDecision> organization = ORGANIZATION_WRITE_PREFIXES.stream()
+                .map(prefix -> new TenantRouteDecision(
+                        "organization", prefix, RouteOwner.LEGACY, WriteOwnership.LEGACY_WRITE, 0L))
+                .toList();
+        return java.util.stream.Stream.concat(identity.stream(), organization.stream()).toList();
     }
 }

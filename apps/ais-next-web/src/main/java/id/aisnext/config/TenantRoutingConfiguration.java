@@ -114,6 +114,6 @@ public class TenantRoutingConfiguration {
      * @return route gate protecting all Phase 2 identity prefixes
      */
     @Bean TenantRouteGateFilter tenantRouteGateFilter(TenantRoutePolicy routePolicy) {
-        return new TenantRouteGateFilter(routePolicy, PhaseTwoRoutes.identityReadPrefixes());
+        return new TenantRouteGateFilter(routePolicy, PhaseTwoRoutes.governedPrefixes());
     }
 }

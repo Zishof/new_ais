@@ -6,8 +6,10 @@ import id.aisnext.security.api.NonceStore;
 import id.aisnext.security.infrastructure.JdbcNonceStore;
 import id.aisnext.tenant.api.TenantCatalog;
 import id.aisnext.tenant.api.TenantRoutePolicy;
+import id.aisnext.tenant.api.TenantWritePolicy;
 import id.aisnext.tenant.infrastructure.JdbcTenantCatalog;
 import id.aisnext.tenant.infrastructure.JdbcTenantRoutePolicy;
+import id.aisnext.tenant.infrastructure.JdbcTenantWritePolicy;
 import org.flywaydb.core.Flyway;
 import org.springframework.boot.health.contributor.Health;
 import org.springframework.boot.health.contributor.HealthIndicator;
@@ -96,6 +98,16 @@ public class ControlPlaneConfiguration {
      */
     @Bean TenantRoutePolicy tenantRoutePolicy(JdbcClient controlJdbcClient) {
         return new JdbcTenantRoutePolicy(controlJdbcClient);
+    }
+
+    /**
+     * Exposes persistent aggregate write ownership from the control plane.
+     *
+     * @param controlJdbcClient client connected only to the control database
+     * @return fail-closed tenant write policy used by command handlers
+     */
+    @Bean TenantWritePolicy tenantWritePolicy(JdbcClient controlJdbcClient) {
+        return new JdbcTenantWritePolicy(controlJdbcClient);
     }
 
     /**
