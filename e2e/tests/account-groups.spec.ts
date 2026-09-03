@@ -40,7 +40,8 @@ test('login reaches accessible read-only account-group directory', async ({ page
   await expect(page.getByRole('heading', { name: 'Grup akun keuangan' })).toBeVisible();
   await expect(page.locator('tbody tr').first().getByRole(
     'cell', { name: result.items[0].name, exact: true }).first()).toBeVisible();
-  await expect(page.getByText('Perubahan grup akun tetap dilakukan di AIS Legacy.')).toBeVisible();
+  await expect(page.getByRole('status')).toContainText(
+    'Semua perubahan, jurnal, posting, dan pembayaran tetap dilakukan di AIS Legacy.');
   const accessibility = await new AxeBuilder({ page })
     .withTags(['wcag2a', 'wcag2aa', 'wcag21aa', 'wcag22aa'])
     .analyze();
