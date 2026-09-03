@@ -1,0 +1,84 @@
+{
+  "phase": 5,
+  "module": "academic-core",
+  "capability": "school-student-directory",
+  "legacyMenu": {
+    "id": 887727,
+    "label": "Siswa",
+    "url": "/pages/master/sekolah/siswa.zul",
+    "readAuthority": "LEGACY_MENU_887727_READ"
+  },
+  "routes": [
+    "/academic/students",
+    "/api/v1/academic/students"
+  ],
+  "defaultRouteDecision": {
+    "owner": "LEGACY",
+    "writeOwnership": "LEGACY_WRITE"
+  },
+  "uatRouteDecision": {
+    "owner": "NEXT",
+    "writeOwnership": "NEXT_READ_ONLY"
+  },
+  "sourceRelations": [
+    "sekolah.siswa",
+    "sekolah.sekolah",
+    "sekolah.kelas",
+    "sekolah.status_awal_siswa",
+    "sekolah.status_keluar_siswa",
+    "public.tbmrole"
+  ],
+  "responseFields": [
+    "studentId",
+    "studentNumber",
+    "studentName",
+    "entryYear",
+    "schoolName",
+    "currentClassName",
+    "initialStatusName",
+    "exitStatusName",
+    "active"
+  ],
+  "excludedDataClasses": [
+    "credentials-and-tokens",
+    "national-identifiers",
+    "birth-and-contact-data",
+    "parent-and-guardian-data",
+    "health-religion-and-biometric-data",
+    "financial-history",
+    "photos-signatures-and-social-profiles",
+    "serialized-free-form-fields"
+  ],
+  "request": {
+    "page": "zero-based integer",
+    "size": "integer 1..100",
+    "q": "trimmed case-insensitive student-number or student-name fragment"
+  },
+  "predicates": [
+    "student name is non-null and nonblank",
+    "student school is non-null",
+    "student active is null or true",
+    "active role exists and is active",
+    "role foundation is null or equals student foundation",
+    "role school is null or equals student school"
+  ],
+  "ordering": [
+    "entryYear DESC",
+    "studentNumber ASC",
+    "studentId ASC"
+  ],
+  "baseline": {
+    "capturedAt": "2026-09-04",
+    "sourceStudentRows": 3,
+    "eligibleGlobalRows": 3,
+    "schemaFingerprintMd5": "4bc1104b1923ac957634bbf1bc7b620c",
+    "projectionFingerprintMd5": "a32508c409c760dea6520f8672edc3b4",
+    "sourceCloneParity": true
+  },
+  "writePolicy": "SELECT_ONLY",
+  "productionGates": [
+    "student-domain-owner-acceptance",
+    "privacy-review",
+    "target-environment-performance"
+  ]
+}

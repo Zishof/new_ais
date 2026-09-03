@@ -13,11 +13,10 @@
 | 8 — Retirement | Remove legacy routes one at a time | Traffic zero, retention/archive and rollback window expired |
 
 This iteration implements Phase 0 deliverables, Phase 1 foundation, the complete Phase 2 read-only
-identity slice, and a technical Phase 3 UAT candidate for `sekolah.jenis_sekolah`. It also starts
-Phase 4 with the audited, read-only daily employee-attendance monitor. The attendance increment
-explicitly excludes the legacy page's render-time repair writes until their aggregate ownership is
-understood. Write routes are enabled only for the isolated `uat-local` clone; the normal `local`
-tenant remains read-only and returns 404 for Next-owned candidate routes.
+identity slice, and a technical Phase 3 UAT candidate for `sekolah.jenis_sekolah`. It also completes
+the technical Phase 4 read-only daily employee-attendance candidate and starts Phase 5 with an
+audited, data-minimized school-student directory contract. Candidate routes are enabled only for
+the isolated `uat-local` clone; the normal `local` tenant remains legacy-owned.
 
 Phase 3 is not production-complete. The isolated live ZK compatibility rehearsal now proves both
 Next-to-ZK and ZK-to-Next UI visibility with API cleanup and source-database isolation. Product-owner
@@ -30,3 +29,9 @@ Phase 4 technical UAT is complete, including the documented same-process databas
 and route rollback rehearsals. Production promotion additionally requires the attendance domain
 owner's parity acceptance. The source currently has no employee or daily-attendance rows, so its
 empty-state parity passed while non-empty validation remained clone-only and was fully cleaned up.
+
+The first Phase 5 contract selects `/academic/students` as a read-only, role-scoped projection of
+`sekolah.siswa`. It excludes credentials, contact/parent/health/financial data and every write or
+bulk-file operation from the broad legacy page. Implementation and clone UAT remain required
+before this slice becomes a technical candidate; production additionally requires academic-owner
+acceptance and privacy review.

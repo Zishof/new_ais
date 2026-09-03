@@ -41,3 +41,10 @@ clone-only recorded/unrecorded fixtures, deterministic duplicate selection, exac
 negatives, responsive accessibility, explicit no-write verification, and a CORE database
 outage/recovery rehearsal. Full attendance editing and render-time repair behavior remain legacy
 owned and are outside this read-only contract.
+
+The first Phase 5 increment adds a minimized school-student projection. Its mandatory tests cover
+active-role foundation/school scoping, exact menu `887727` authorization, active-only semantics,
+bounded name-or-number filtering, stable paging order, absence of excluded personal columns,
+source/clone fingerprint parity, responsive accessibility, same-process outage recovery, and
+route rollback. All student writes, credentials, files, class assignment, and financial behavior
+remain legacy owned.
