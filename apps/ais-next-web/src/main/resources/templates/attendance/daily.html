@@ -23,7 +23,7 @@
       <div class="col-12 col-md-2"><button class="btn btn-primary w-100" type="submit">Terapkan</button></div>
     </div></div>
   </form>
-  <div class="card mt-3"><div class="table-responsive"><table class="table table-vcenter card-table">
+  <div class="card mt-3"><div class="table-responsive" tabindex="0" role="region" aria-label="Tabel kehadiran pegawai"><table class="table table-vcenter card-table">
     <caption class="visually-hidden" th:text="|Kehadiran pegawai pada ${selectedDate}|">Kehadiran pegawai harian</caption>
     <thead><tr><th scope="col">NIP</th><th scope="col">Nama</th><th scope="col">Status</th><th scope="col">Masuk</th><th scope="col">Pulang</th><th scope="col">Keterangan</th><th scope="col">Pencatatan</th></tr></thead>
     <tbody><tr th:each="item : ${result.items}">
