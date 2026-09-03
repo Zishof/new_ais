@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="id" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Grup akun keuangan · AIS Next</title>
+  <link rel="stylesheet" href="/assets/vendor/tabler/css/tabler.min.css">
+  <link rel="stylesheet" href="/assets/css/ais-next.css">
+</head>
+<body><header th:replace="~{fragments/navigation :: topbar}"></header>
+<main class="page-wrapper"><div class="container-xl py-4">
+  <nav aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="/dashboard">Dasbor</a></li><li class="breadcrumb-item active">Grup akun keuangan</li></ol></nav>
+  <div class="page-header"><div><h1 class="page-title">Grup akun keuangan</h1><p class="text-secondary mb-0">Referensi global baca-saja · tanpa saldo atau nilai transaksi</p></div></div>
+  <div class="alert alert-warning mt-3" role="status">Tidak ada operasi keuangan di halaman ini. Semua perubahan, jurnal, posting, dan pembayaran tetap dilakukan di AIS Legacy.</div>
+  <form class="card card-sm mt-3" method="get" action="/finance/account-groups">
+    <div class="card-body"><div class="row g-2 align-items-end">
+      <div class="col-12 col-md-10"><label class="form-label" for="q">Nama grup akun</label><input id="q" name="q" class="form-control" th:value="${query}" placeholder="Cari grup akun"></div>
+      <div class="col-12 col-md-2"><button class="btn btn-primary w-100" type="submit">Cari</button></div>
+    </div></div>
+  </form>
+  <div class="card mt-3"><div class="table-responsive" tabindex="0" role="region" aria-label="Tabel grup akun keuangan"><table class="table table-vcenter card-table">
+    <caption class="visually-hidden">Daftar referensi grup akun keuangan</caption>
+    <thead><tr><th scope="col">Nama grup akun</th><th scope="col">Keterangan</th></tr></thead>
+    <tbody><tr th:each="accountGroup : ${result.items}">
+      <td th:text="${accountGroup.name}">Nama</td>
+      <td th:text="${accountGroup.description.empty ? '—' : accountGroup.description}">Keterangan</td>
+    </tr></tbody>
+  </table></div><div th:if="${result.items.empty}"><div th:replace="~{fragments/status :: empty('Tidak ada grup akun yang cocok')}"></div></div></div>
+  <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mt-3">
+    <p class="text-secondary mb-0" th:text="|Total ${result.total} grup akun · halaman ${result.page + 1} dari ${result.totalPages == 0 ? 1 : result.totalPages}|">Total</p>
+    <nav aria-label="Paginasi grup akun keuangan" th:if="${result.totalPages > 1}"><ul class="pagination mb-0">
+      <li class="page-item" th:classappend="${result.page == 0} ? 'disabled'"><span class="page-link" th:if="${result.page == 0}" aria-disabled="true">Sebelumnya</span><a class="page-link" th:if="${result.page > 0}" th:href="@{/finance/account-groups(page=${result.page - 1},size=${result.size},q=${query})}" rel="prev">Sebelumnya</a></li>
+      <li class="page-item" th:classappend="${result.page + 1 >= result.totalPages} ? 'disabled'"><span class="page-link" th:if="${result.page + 1 >= result.totalPages}" aria-disabled="true">Berikutnya</span><a class="page-link" th:if="${result.page + 1 < result.totalPages}" th:href="@{/finance/account-groups(page=${result.page + 1},size=${result.size},q=${query})}" rel="next">Berikutnya</a></li>
+    </ul></nav>
+  </div>
+</div></main><div id="a11y-live" class="visually-hidden" aria-live="polite"></div>
+</body></html>

@@ -2,6 +2,7 @@ package id.aisnext.config;
 
 import static id.aisnext.academic.api.StudentDirectoryAuthorities.READ_STUDENTS;
 import static id.aisnext.identity.application.HandoffAuthorizationService.ROLE_DIRECTORY_READ_AUTHORITY;
+import static id.aisnext.finance.api.AccountGroupAuthorities.READ_ACCOUNT_GROUPS;
 import static id.aisnext.attendance.api.AttendanceAuthorities.READ_DAILY;
 import static id.aisnext.organization.api.SchoolTypeAuthorities.CREATE;
 import static id.aisnext.organization.api.SchoolTypeAuthorities.DELETE;
@@ -95,6 +96,9 @@ public class SecurityConfiguration {
                         .requestMatchers(HttpMethod.GET, "/supporting/library/item-types",
                                 "/api/v1/supporting/library/item-types").hasAuthority(READ_ITEM_TYPES)
                         .requestMatchers("/supporting/**", "/api/v1/supporting/**").denyAll()
+                        .requestMatchers(HttpMethod.GET, "/finance/account-groups",
+                                "/api/v1/finance/account-groups").hasAuthority(READ_ACCOUNT_GROUPS)
+                        .requestMatchers("/finance/**", "/api/v1/finance/**").denyAll()
                         .requestMatchers("/roles/**", "/api/v1/roles/**", "/search", "/api/v1/search")
                         .hasAuthority(ROLE_DIRECTORY_READ_AUTHORITY)
                         .anyRequest().authenticated())

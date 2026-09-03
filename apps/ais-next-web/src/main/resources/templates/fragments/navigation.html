@@ -12,6 +12,7 @@
       <a class="nav-link" href="/attendance/daily" th:if="${canReadDailyAttendance}">Kehadiran harian</a>
       <a class="nav-link" href="/academic/students" th:if="${canReadStudentDirectory}">Direktori siswa</a>
       <a class="nav-link" href="/supporting/library/item-types" th:if="${canReadLibraryItemTypes}">Jenis item perpustakaan</a>
+      <a class="nav-link" href="/finance/account-groups" th:if="${canReadAccountGroups}">Grup akun</a>
     </nav>
     <form class="d-flex ms-md-auto me-2" method="get" action="/search" th:if="${canReadRoleDirectory}">
       <label class="visually-hidden" for="global-search">Pencarian global</label>

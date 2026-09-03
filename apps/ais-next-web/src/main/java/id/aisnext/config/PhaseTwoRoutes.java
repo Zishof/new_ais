@@ -26,6 +26,9 @@ public final class PhaseTwoRoutes {
     private static final List<String> SUPPORTING_ERP_READ_PREFIXES = List.of(
             "/supporting/library/item-types",
             "/api/v1/supporting/library/item-types");
+    private static final List<String> FINANCE_READ_PREFIXES = List.of(
+            "/finance/account-groups",
+            "/api/v1/finance/account-groups");
 
     /** Prevents instantiation of this static route catalog. */
     private PhaseTwoRoutes() {
@@ -77,6 +80,15 @@ public final class PhaseTwoRoutes {
     }
 
     /**
+     * Returns finance prefixes reserved for the read-only Phase 7 account-group slice.
+     *
+     * @return immutable list of account-group UI and API prefixes
+     */
+    public static List<String> financeReadPrefixes() {
+        return FINANCE_READ_PREFIXES;
+    }
+
+    /**
      * Returns every request prefix that must have an explicit tenant route decision.
      *
      * @return immutable prefix list across every governed migration module
@@ -84,7 +96,7 @@ public final class PhaseTwoRoutes {
     public static List<String> governedPrefixes() {
         return java.util.stream.Stream.of(
                         IDENTITY_READ_PREFIXES, ORGANIZATION_WRITE_PREFIXES, ATTENDANCE_READ_PREFIXES,
-                        ACADEMIC_READ_PREFIXES, SUPPORTING_ERP_READ_PREFIXES)
+                        ACADEMIC_READ_PREFIXES, SUPPORTING_ERP_READ_PREFIXES, FINANCE_READ_PREFIXES)
                 .flatMap(List::stream)
                 .toList();
     }
@@ -115,7 +127,12 @@ public final class PhaseTwoRoutes {
                 .map(prefix -> new TenantRouteDecision(
                         "supporting-erp", prefix, RouteOwner.LEGACY, WriteOwnership.LEGACY_WRITE, 0L))
                 .toList();
-        return java.util.stream.Stream.of(identity, organization, attendance, academic, supportingErp)
+        List<TenantRouteDecision> finance = FINANCE_READ_PREFIXES.stream()
+                .map(prefix -> new TenantRouteDecision(
+                        "finance", prefix, RouteOwner.LEGACY, WriteOwnership.LEGACY_WRITE, 0L))
+                .toList();
+        return java.util.stream.Stream.of(identity, organization, attendance, academic, supportingErp,
+                        finance)
                 .flatMap(List::stream)
                 .toList();
     }

@@ -6,6 +6,6 @@
     <artifactId>modules-parent</artifactId><packaging>pom</packaging>
     <modules>
         <module>organization</module><module>identity</module><module>academic-core</module>
-        <module>attendance</module><module>supporting-erp</module><module>integration</module>
+        <module>attendance</module><module>supporting-erp</module><module>finance</module><module>integration</module>
     </modules>
 </project>
