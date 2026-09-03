@@ -48,3 +48,8 @@ bounded name-or-number filtering, stable paging order, absence of excluded perso
 source/clone fingerprint parity, responsive accessibility, same-process outage recovery, and
 route rollback. All student writes, credentials, files, class assignment, and financial behavior
 remain legacy owned.
+
+The technical Phase 5 UAT passed all six Playwright test executions across desktop Chrome and Pixel 7,
+with zero axe violations for the configured WCAG A/AA tags. The effective-authorization test also
+proved that a `role_privilage` row without a matching `job_has_menu` assignment is correctly denied.
+The exact clone-only assignment used for the scoped zero-row check was removed afterward.

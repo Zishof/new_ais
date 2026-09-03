@@ -21,4 +21,9 @@ Phase 4 local UAT remeasured two clean starts at 10.686 and 10.779 seconds. The 
 156,357 KiB of a 278,528 KiB committed G1 heap. Both pass the initial local startup and idle-heap
 budgets; they are not a substitute for target-environment release-candidate measurements.
 
+Phase 5 local UAT started the current application artifact in 9.436 seconds. After browser,
+rollback, and two controlled recovery checks, PID 31940 used 177,764 KiB of a 278,528 KiB committed
+G1 heap. This passes the initial local startup and idle-heap budgets but is not target-environment
+load evidence.
+
 When active tenant concurrency approaches PostgreSQL limits, put PgBouncer in transaction-pooling mode after validating prepared statements, session variables and read-only initialization. Continue bounding application pools; PgBouncer is not permission to multiply them.

@@ -14,9 +14,9 @@
 
 This iteration implements Phase 0 deliverables, Phase 1 foundation, the complete Phase 2 read-only
 identity slice, and a technical Phase 3 UAT candidate for `sekolah.jenis_sekolah`. It also completes
-the technical Phase 4 read-only daily employee-attendance candidate and starts Phase 5 with an
-audited, data-minimized school-student directory contract. Candidate routes are enabled only for
-the isolated `uat-local` clone; the normal `local` tenant remains legacy-owned.
+the technical Phase 4 read-only daily employee-attendance candidate and the first technical Phase
+5 candidate: a data-minimized, role-scoped school-student directory. Candidate routes are enabled
+only for the isolated `uat-local` clone; the normal `local` tenant remains legacy-owned.
 
 Phase 3 is not production-complete. The isolated live ZK compatibility rehearsal now proves both
 Next-to-ZK and ZK-to-Next UI visibility with API cleanup and source-database isolation. Product-owner
@@ -32,6 +32,8 @@ empty-state parity passed while non-empty validation remained clone-only and was
 
 The first Phase 5 contract selects `/academic/students` as a read-only, role-scoped projection of
 `sekolah.siswa`. It excludes credentials, contact/parent/health/financial data and every write or
-bulk-file operation from the broad legacy page. Implementation and clone UAT remain required
-before this slice becomes a technical candidate; production additionally requires academic-owner
-acceptance and privacy review.
+bulk-file operation from the broad legacy page. Implementation and technical clone UAT now pass,
+including desktop/mobile accessibility, exact authorization negatives, route rollback,
+same-process database recovery, and source invariance. Production still requires academic-owner
+acceptance, privacy review, and target-environment performance evidence. Remaining student,
+curriculum, and assessment capabilities advance only as separate audited increments.

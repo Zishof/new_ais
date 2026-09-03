@@ -15,3 +15,4 @@
 | R11 | Control-plane outage blocks handoff/routing | Medium | High | Backup, health checks, cached-safe routing policy, legacy rollback | Control DB unavailable |
 | R12 | Big-bang expectations overrun scope | Medium | High | Gated roadmap and explicit phase reporting | Cutover proposed without evidence |
 | R13 | A legacy attendance read triggers hidden repair writes | High | Critical | SELECT-only Next projection; keep synchronization/editing legacy-owned until separately audited | Any attendance GET changes a row or sequence |
+| R14 | A broad student entity exposes sensitive personal data | High | Critical | Explicit projection allowlist, response-shape tests, privacy review, sanitized evidence retention | Any unapproved student field appears in API, logs, or screenshots |
