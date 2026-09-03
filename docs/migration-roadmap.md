@@ -37,3 +37,9 @@ including desktop/mobile accessibility, exact authorization negatives, route rol
 same-process database recovery, and source invariance. Production still requires academic-owner
 acceptance, privacy review, and target-environment performance evidence. Remaining student,
 curriculum, and assessment capabilities advance only as separate audited increments.
+
+Phase 6 starts with an audited read-only directory for `library.jenis_item`. This deliberately
+avoids the broad item-catalog composer, whose maintenance and bulk-publication behavior remains
+legacy-owned. Implementation and clone UAT are required before the item-type directory becomes a
+technical candidate; production additionally requires library-owner acceptance, consumer and
+operations review, and target-environment performance evidence.

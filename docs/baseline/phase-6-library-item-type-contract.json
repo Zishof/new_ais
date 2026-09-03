@@ -1,0 +1,67 @@
+{
+  "phase": 6,
+  "module": "supporting-erp",
+  "capability": "library-item-type-directory",
+  "legacyMenu": {
+    "id": 56141,
+    "label": "Jenis Item",
+    "url": "/pages/master/library/jenis_item.zul",
+    "readAuthority": "LEGACY_MENU_56141_READ"
+  },
+  "routes": [
+    "/supporting/library/item-types",
+    "/api/v1/supporting/library/item-types"
+  ],
+  "defaultRouteDecision": {
+    "owner": "LEGACY",
+    "writeOwnership": "LEGACY_WRITE"
+  },
+  "uatRouteDecision": {
+    "owner": "NEXT",
+    "writeOwnership": "NEXT_READ_ONLY"
+  },
+  "sourceRelations": [
+    "library.jenis_item",
+    "public.job_has_menu",
+    "public.role_privilage",
+    "public.tbmrole"
+  ],
+  "responseFields": [
+    "itemTypeId",
+    "name",
+    "description"
+  ],
+  "excludedFields": [
+    "oleh",
+    "olehid",
+    "tanggal_dirubah",
+    "defaultitem"
+  ],
+  "request": {
+    "page": "zero-based integer",
+    "size": "integer 1..100",
+    "q": "trimmed case-insensitive literal name-or-description fragment"
+  },
+  "predicates": [
+    "item-type name is non-null and nonblank",
+    "active role has effective legacy menu 56141 read authority"
+  ],
+  "ordering": [
+    "name ASC",
+    "itemTypeId ASC"
+  ],
+  "baseline": {
+    "capturedAt": "2026-09-04",
+    "sourceRows": 31,
+    "eligibleRows": 31,
+    "schemaFingerprintMd5": "62062fd460e1f78aee71928b54bd3fc4",
+    "projectionFingerprintMd5": "2ca4bda70481dfdc40dd9282ac3f8150",
+    "sourceCloneParity": true
+  },
+  "writePolicy": "SELECT_ONLY",
+  "productionGates": [
+    "library-owner-acceptance",
+    "consumer-and-operations-review",
+    "target-environment-performance"
+  ]
+}

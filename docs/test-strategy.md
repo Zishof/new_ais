@@ -53,3 +53,9 @@ The technical Phase 5 UAT passed all six Playwright test executions across deskt
 with zero axe violations for the configured WCAG A/AA tags. The effective-authorization test also
 proved that a `role_privilage` row without a matching `job_has_menu` assignment is correctly denied.
 The exact clone-only assignment used for the scoped zero-row check was removed afterward.
+
+The first Phase 6 contract covers the global library item-type reference. Mandatory tests include
+effective menu `56141` authorization, exact three-field response minimization, literal
+name-or-description filtering, stable paging, source/clone fingerprint parity, responsive
+accessibility, same-process outage recovery, route rollback, and no-write verification. Catalog,
+publication, circulation, acquisition, inventory, and file behavior remain legacy-owned.
