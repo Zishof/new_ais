@@ -1,6 +1,7 @@
 package id.aisnext.config;
 
 import static id.aisnext.identity.application.HandoffAuthorizationService.ROLE_DIRECTORY_READ_AUTHORITY;
+import static id.aisnext.attendance.api.AttendanceAuthorities.READ_DAILY;
 import static id.aisnext.organization.api.SchoolTypeAuthorities.CREATE;
 import static id.aisnext.organization.api.SchoolTypeAuthorities.DELETE;
 import static id.aisnext.organization.api.SchoolTypeAuthorities.READ;
@@ -83,6 +84,9 @@ public class SecurityConfiguration {
                         .requestMatchers(HttpMethod.PUT, "/api/v1/school-types/*").hasAuthority(UPDATE)
                         .requestMatchers(HttpMethod.DELETE, "/api/v1/school-types/*").hasAuthority(DELETE)
                         .requestMatchers("/school-types/**", "/api/v1/school-types/**").denyAll()
+                        .requestMatchers(HttpMethod.GET, "/attendance/daily",
+                                "/api/v1/attendance/daily").hasAuthority(READ_DAILY)
+                        .requestMatchers("/attendance/**", "/api/v1/attendance/**").denyAll()
                         .requestMatchers("/roles/**", "/api/v1/roles/**", "/search", "/api/v1/search")
                         .hasAuthority(ROLE_DIRECTORY_READ_AUTHORITY)
                         .anyRequest().authenticated())

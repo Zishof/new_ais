@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="id" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Kehadiran harian · AIS Next</title>
+  <link rel="stylesheet" href="/assets/vendor/tabler/css/tabler.min.css">
+  <link rel="stylesheet" href="/assets/css/ais-next.css">
+</head>
+<body><header th:replace="~{fragments/navigation :: topbar}"></header>
+<main class="page-wrapper"><div class="container-xl py-4">
+  <nav aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="/dashboard">Dasbor</a></li><li class="breadcrumb-item active">Kehadiran harian</li></ol></nav>
+  <div class="page-header"><div><h1 class="page-title">Kehadiran pegawai harian</h1><p class="text-secondary mb-0">Monitor baca-saja · tidak menjalankan sinkronisasi atau koreksi otomatis legacy</p></div></div>
+  <div class="alert alert-info mt-3" role="status">Data ditampilkan apa adanya dari CORE. Perubahan absensi tetap dilakukan di AIS Legacy.</div>
+  <form class="card card-sm mt-3" method="get" action="/attendance/daily">
+    <div class="card-body"><div class="row g-2 align-items-end">
+      <div class="col-12 col-md-3"><label class="form-label" for="date">Tanggal</label><input id="date" name="date" class="form-control" type="date" required th:value="${selectedDate}"></div>
+      <div class="col-12 col-md-4"><label class="form-label" for="q">Nama atau NIP</label><input id="q" name="q" class="form-control" th:value="${query}" placeholder="Cari pegawai"></div>
+      <div class="col-12 col-md-3"><label class="form-label" for="recordState">Catatan absensi</label><select id="recordState" name="recordState" class="form-select">
+        <option value="ALL" th:selected="${recordState == 'ALL'}">Semua pegawai</option>
+        <option value="RECORDED" th:selected="${recordState == 'RECORDED'}">Sudah tercatat</option>
+        <option value="UNRECORDED" th:selected="${recordState == 'UNRECORDED'}">Belum tercatat</option>
+      </select></div>
+      <div class="col-12 col-md-2"><button class="btn btn-primary w-100" type="submit">Terapkan</button></div>
+    </div></div>
+  </form>
+  <div class="card mt-3"><div class="table-responsive"><table class="table table-vcenter card-table">
+    <caption class="visually-hidden" th:text="|Kehadiran pegawai pada ${selectedDate}|">Kehadiran pegawai harian</caption>
+    <thead><tr><th scope="col">NIP</th><th scope="col">Nama</th><th scope="col">Status</th><th scope="col">Masuk</th><th scope="col">Pulang</th><th scope="col">Keterangan</th><th scope="col">Pencatatan</th></tr></thead>
+    <tbody><tr th:each="item : ${result.items}">
+      <td th:text="${item.employeeNumber.empty ? '—' : item.employeeNumber}">NIP</td>
+      <td th:text="${item.employeeName.empty ? '—' : item.employeeName}">Nama</td>
+      <td><span th:text="${item.statusName.empty ? '—' : item.statusName}">Status</span><span class="text-secondary ms-1" th:if="${!item.statusCode.empty}" th:text="|(${item.statusCode})|">(M)</span></td>
+      <td th:text="${item.checkIn == null ? '—' : item.checkIn}">—</td><td th:text="${item.checkOut == null ? '—' : item.checkOut}">—</td>
+      <td th:text="${item.note == null or item.note.empty ? '—' : item.note}">—</td>
+      <td><span class="badge" th:classappend="${item.recordState.name() == 'RECORDED'} ? 'ais-status-active' : 'ais-status-inactive'" th:text="${item.recordState.name() == 'RECORDED' ? 'Sudah' : 'Belum'}">Belum</span></td>
+    </tr></tbody>
+  </table></div><div th:if="${result.items.empty}"><div th:replace="~{fragments/status :: empty('Tidak ada pegawai yang cocok pada tanggal ini')}"></div></div></div>
+  <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mt-3">
+    <p class="text-secondary mb-0" th:text="|Total ${result.total} pegawai · halaman ${result.page + 1} dari ${result.totalPages == 0 ? 1 : result.totalPages}|">Total</p>
+    <nav aria-label="Paginasi kehadiran harian" th:if="${result.totalPages > 1}"><ul class="pagination mb-0">
+      <li class="page-item" th:classappend="${result.page == 0} ? 'disabled'"><span class="page-link" th:if="${result.page == 0}" aria-disabled="true">Sebelumnya</span><a class="page-link" th:if="${result.page > 0}" th:href="@{/attendance/daily(date=${selectedDate},page=${result.page - 1},size=${result.size},q=${query},recordState=${recordState})}" rel="prev">Sebelumnya</a></li>
+      <li class="page-item" th:classappend="${result.page + 1 >= result.totalPages} ? 'disabled'"><span class="page-link" th:if="${result.page + 1 >= result.totalPages}" aria-disabled="true">Berikutnya</span><a class="page-link" th:if="${result.page + 1 < result.totalPages}" th:href="@{/attendance/daily(date=${selectedDate},page=${result.page + 1},size=${result.size},q=${query},recordState=${recordState})}" rel="next">Berikutnya</a></li>
+    </ul></nav>
+  </div>
+</div></main><div id="a11y-live" class="visually-hidden" aria-live="polite"></div>
+</body></html>

@@ -17,6 +17,9 @@ public final class PhaseTwoRoutes {
     private static final List<String> ORGANIZATION_WRITE_PREFIXES = List.of(
             "/school-types",
             "/api/v1/school-types");
+    private static final List<String> ATTENDANCE_READ_PREFIXES = List.of(
+            "/attendance/daily",
+            "/api/v1/attendance/daily");
 
     /** Prevents instantiation of this static route catalog. */
     private PhaseTwoRoutes() {
@@ -41,13 +44,24 @@ public final class PhaseTwoRoutes {
     }
 
     /**
+     * Returns attendance prefixes reserved for the read-only Phase 4 vertical slice.
+     *
+     * @return immutable list of daily attendance UI and API prefixes
+     */
+    public static List<String> attendanceReadPrefixes() {
+        return ATTENDANCE_READ_PREFIXES;
+    }
+
+    /**
      * Returns every request prefix that must have an explicit tenant route decision.
      *
      * @return immutable identity and organization prefix list
      */
     public static List<String> governedPrefixes() {
-        return java.util.stream.Stream.concat(
-                IDENTITY_READ_PREFIXES.stream(), ORGANIZATION_WRITE_PREFIXES.stream()).toList();
+        return java.util.stream.Stream.of(
+                        IDENTITY_READ_PREFIXES, ORGANIZATION_WRITE_PREFIXES, ATTENDANCE_READ_PREFIXES)
+                .flatMap(List::stream)
+                .toList();
     }
 
     /**
@@ -64,6 +78,12 @@ public final class PhaseTwoRoutes {
                 .map(prefix -> new TenantRouteDecision(
                         "organization", prefix, RouteOwner.LEGACY, WriteOwnership.LEGACY_WRITE, 0L))
                 .toList();
-        return java.util.stream.Stream.concat(identity.stream(), organization.stream()).toList();
+        List<TenantRouteDecision> attendance = ATTENDANCE_READ_PREFIXES.stream()
+                .map(prefix -> new TenantRouteDecision(
+                        "attendance", prefix, RouteOwner.LEGACY, WriteOwnership.LEGACY_WRITE, 0L))
+                .toList();
+        return java.util.stream.Stream.of(identity, organization, attendance)
+                .flatMap(List::stream)
+                .toList();
     }
 }

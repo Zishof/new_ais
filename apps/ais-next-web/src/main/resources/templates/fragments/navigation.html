@@ -9,6 +9,7 @@
       <a class="nav-link" href="/profile">Profil</a>
       <a class="nav-link" href="/roles" th:if="${canReadRoleDirectory}">Grup pengguna</a>
       <a class="nav-link" href="/school-types" th:if="${canReadSchoolTypes}">Jenis sekolah</a>
+      <a class="nav-link" href="/attendance/daily" th:if="${canReadDailyAttendance}">Kehadiran harian</a>
     </nav>
     <form class="d-flex ms-md-auto me-2" method="get" action="/search" th:if="${canReadRoleDirectory}">
       <label class="visually-hidden" for="global-search">Pencarian global</label>
