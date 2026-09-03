@@ -9,7 +9,9 @@ import id.aisnext.tenant.api.TenantDataSourceKey;
 import id.aisnext.tenant.api.TenantDatabaseDescriptor;
 import id.aisnext.tenant.api.TenantId;
 import id.aisnext.tenant.api.TenantMode;
+import id.aisnext.tenant.api.TenantRoutePolicy;
 import id.aisnext.tenant.infrastructure.InMemoryTenantCatalog;
+import id.aisnext.tenant.infrastructure.InMemoryTenantRoutePolicy;
 import java.time.ZoneId;
 import java.util.Locale;
 import java.util.Map;
@@ -59,4 +61,13 @@ public class LocalCatalogConfiguration {
      * @return an in-memory, process-local one-time nonce store
      */
     @Bean NonceStore inMemoryNonceStore() { return new InMemoryNonceStore(); }
+
+    /**
+     * Creates local read-only route decisions when persistent control metadata is disabled.
+     *
+     * @return immutable route policy for the Phase 2 identity prefixes
+     */
+    @Bean TenantRoutePolicy inMemoryTenantRoutePolicy() {
+        return new InMemoryTenantRoutePolicy(PhaseTwoRoutes.localNextReadOnlyDecisions());
+    }
 }

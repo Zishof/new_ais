@@ -5,7 +5,9 @@ import com.zaxxer.hikari.HikariDataSource;
 import id.aisnext.security.api.NonceStore;
 import id.aisnext.security.infrastructure.JdbcNonceStore;
 import id.aisnext.tenant.api.TenantCatalog;
+import id.aisnext.tenant.api.TenantRoutePolicy;
 import id.aisnext.tenant.infrastructure.JdbcTenantCatalog;
+import id.aisnext.tenant.infrastructure.JdbcTenantRoutePolicy;
 import org.flywaydb.core.Flyway;
 import org.springframework.boot.health.contributor.Health;
 import org.springframework.boot.health.contributor.HealthIndicator;
@@ -84,6 +86,16 @@ public class ControlPlaneConfiguration {
      */
     @Bean TenantCatalog tenantCatalog(JdbcClient controlJdbcClient) {
         return new JdbcTenantCatalog(controlJdbcClient);
+    }
+
+    /**
+     * Exposes persistent per-tenant route ownership from the control plane.
+     *
+     * @param controlJdbcClient client connected only to the control database
+     * @return tenant route policy used by the fail-closed servlet gate
+     */
+    @Bean TenantRoutePolicy tenantRoutePolicy(JdbcClient controlJdbcClient) {
+        return new JdbcTenantRoutePolicy(controlJdbcClient);
     }
 
     /**

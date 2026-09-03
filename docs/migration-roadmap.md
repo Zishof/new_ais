@@ -12,4 +12,10 @@
 | 7 — Finance/payment | Accounting and payment only after maturity | Reconciliation, security and rollback sign-off |
 | 8 — Retirement | Remove legacy routes one at a time | Traffic zero, retention/archive and rollback window expired |
 
-This iteration implements Phase 0 deliverables, Phase 1 foundation, and the role/menu portion of Phase 2. It does not enable a write endpoint. The next recommended slice is an organization reference master chosen jointly with the business owner and tested only against clones.
+This iteration implements Phase 0 deliverables, Phase 1 foundation, and the complete Phase 2
+read-only identity slice: active-user/assigned-role handoff validation, server-derived menu
+authorities, dashboard/profile/search, role list/detail, tenant route gating, accessibility and
+rollback rehearsal. It does not enable a write endpoint. Local performance evidence records one
+startup-budget outlier that must be re-measured on the target UAT infrastructure. The next
+recommended slice is an organization reference master chosen jointly with the business owner and
+tested only against clones.

@@ -2,6 +2,7 @@ package id.aisnext.config;
 
 import id.aisnext.tenant.api.TenantCatalog;
 import id.aisnext.tenant.api.TenantResolver;
+import id.aisnext.tenant.api.TenantRoutePolicy;
 import id.aisnext.tenant.api.TenantSecretResolver;
 import id.aisnext.tenant.infrastructure.CoreRoutingDataSource;
 import id.aisnext.tenant.infrastructure.EnvironmentTenantSecretResolver;
@@ -9,6 +10,7 @@ import id.aisnext.tenant.infrastructure.FileRoutingDataSource;
 import id.aisnext.tenant.infrastructure.TenantDataSourceRegistry;
 import id.aisnext.tenant.infrastructure.TrustedHostTenantResolver;
 import id.aisnext.websupport.infrastructure.TenantResolutionFilter;
+import id.aisnext.websupport.infrastructure.TenantRouteGateFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.simple.JdbcClient;
@@ -104,4 +106,14 @@ public class TenantRoutingConfiguration {
      * @return tenant resolution filter
      */
     @Bean TenantResolutionFilter tenantResolutionFilter(TenantResolver resolver) { return new TenantResolutionFilter(resolver); }
+
+    /**
+     * Creates the fail-closed application gate for tenant-specific strangler ownership.
+     *
+     * @param routePolicy control-plane route-decision source
+     * @return route gate protecting all Phase 2 identity prefixes
+     */
+    @Bean TenantRouteGateFilter tenantRouteGateFilter(TenantRoutePolicy routePolicy) {
+        return new TenantRouteGateFilter(routePolicy, PhaseTwoRoutes.identityReadPrefixes());
+    }
 }

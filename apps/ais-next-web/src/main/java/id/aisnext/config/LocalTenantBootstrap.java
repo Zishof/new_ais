@@ -51,6 +51,29 @@ public class LocalTenantBootstrap implements ApplicationRunner {
         }
         upsertDatabase(tenantId, "CORE", properties.getCoreJdbcUrl());
         upsertDatabase(tenantId, "FILE", properties.getFileJdbcUrl());
+        insertInitialRoutes(tenantId);
+    }
+
+    /**
+     * Inserts initial AIS Next read-only ownership without overwriting an operator rollback.
+     *
+     * <p>Once a route exists, only an explicit control-plane operation may change its owner. An
+     * application restart therefore cannot silently undo a switch back to the legacy application.</p>
+     *
+     * @param tenantId control-plane identifier of the local tenant
+     */
+    private void insertInitialRoutes(long tenantId) {
+        for (String prefix : PhaseTwoRoutes.identityReadPrefixes()) {
+            control.sql("""
+                    insert into tenant_module_route
+                        (tenant_id, module_key, route_pattern, route_owner, write_ownership)
+                    values (:tenant, 'identity', :prefix, 'NEXT', 'NEXT_READ_ONLY')
+                    on conflict (tenant_id, module_key, route_pattern) do nothing
+                    """)
+                    .param("tenant", tenantId)
+                    .param("prefix", prefix)
+                    .update();
+        }
     }
 
     /**
