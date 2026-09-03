@@ -1,2 +1,2 @@
-/** Academic aggregate boundaries are inventoried before business code is added. */
+/** Stable public API for audited academic-core contracts. */
 package id.aisnext.academic.api;

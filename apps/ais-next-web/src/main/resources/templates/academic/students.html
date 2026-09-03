@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="id" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Direktori siswa · AIS Next</title>
+  <link rel="stylesheet" href="/assets/vendor/tabler/css/tabler.min.css">
+  <link rel="stylesheet" href="/assets/css/ais-next.css">
+</head>
+<body><header th:replace="~{fragments/navigation :: topbar}"></header>
+<main class="page-wrapper"><div class="container-xl py-4">
+  <nav aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="/dashboard">Dasbor</a></li><li class="breadcrumb-item active">Direktori siswa</li></ol></nav>
+  <div class="page-header"><div><h1 class="page-title">Direktori siswa sekolah</h1><p class="text-secondary mb-0">Proyeksi baca-saja · dibatasi oleh yayasan dan sekolah pada peran aktif</p></div></div>
+  <div class="alert alert-info mt-3" role="status">Hanya data akademik minimum yang ditampilkan. Perubahan data siswa tetap dilakukan di AIS Legacy.</div>
+  <form class="card card-sm mt-3" method="get" action="/academic/students">
+    <div class="card-body"><div class="row g-2 align-items-end">
+      <div class="col-12 col-md-10"><label class="form-label" for="q">Nama atau nomor induk</label><input id="q" name="q" class="form-control" th:value="${query}" placeholder="Cari siswa"></div>
+      <div class="col-12 col-md-2"><button class="btn btn-primary w-100" type="submit">Cari</button></div>
+    </div></div>
+  </form>
+  <div class="card mt-3"><div class="table-responsive" tabindex="0" role="region" aria-label="Tabel direktori siswa"><table class="table table-vcenter card-table">
+    <caption class="visually-hidden">Siswa aktif yang terlihat oleh peran saat ini</caption>
+    <thead><tr><th scope="col">Nomor induk</th><th scope="col">Nama</th><th scope="col">Tahun masuk</th><th scope="col">Sekolah</th><th scope="col">Kelas</th><th scope="col">Status awal</th><th scope="col">Status keluar</th></tr></thead>
+    <tbody><tr th:each="student : ${result.items}">
+      <td th:text="${student.studentNumber.empty ? '—' : student.studentNumber}">Nomor</td>
+      <td th:text="${student.studentName}">Nama</td>
+      <td th:text="${student.entryYear}">2026</td>
+      <td th:text="${student.schoolName.empty ? '—' : student.schoolName}">Sekolah</td>
+      <td th:text="${student.currentClassName.empty ? 'Belum ditetapkan' : student.currentClassName}">Kelas</td>
+      <td th:text="${student.initialStatusName.empty ? '—' : student.initialStatusName}">Status awal</td>
+      <td th:text="${student.exitStatusName.empty ? 'Aktif / belum keluar' : student.exitStatusName}">Status keluar</td>
+    </tr></tbody>
+  </table></div><div th:if="${result.items.empty}"><div th:replace="~{fragments/status :: empty('Tidak ada siswa aktif yang cocok dalam cakupan peran ini')}"></div></div></div>
+  <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mt-3">
+    <p class="text-secondary mb-0" th:text="|Total ${result.total} siswa · halaman ${result.page + 1} dari ${result.totalPages == 0 ? 1 : result.totalPages}|">Total</p>
+    <nav aria-label="Paginasi direktori siswa" th:if="${result.totalPages > 1}"><ul class="pagination mb-0">
+      <li class="page-item" th:classappend="${result.page == 0} ? 'disabled'"><span class="page-link" th:if="${result.page == 0}" aria-disabled="true">Sebelumnya</span><a class="page-link" th:if="${result.page > 0}" th:href="@{/academic/students(page=${result.page - 1},size=${result.size},q=${query})}" rel="prev">Sebelumnya</a></li>
+      <li class="page-item" th:classappend="${result.page + 1 >= result.totalPages} ? 'disabled'"><span class="page-link" th:if="${result.page + 1 >= result.totalPages}" aria-disabled="true">Berikutnya</span><a class="page-link" th:if="${result.page + 1 < result.totalPages}" th:href="@{/academic/students(page=${result.page + 1},size=${result.size},q=${query})}" rel="next">Berikutnya</a></li>
+    </ul></nav>
+  </div>
+</div></main><div id="a11y-live" class="visually-hidden" aria-live="polite"></div>
+</body></html>

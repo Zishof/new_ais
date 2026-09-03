@@ -1,0 +1,14 @@
+<!doctype html>
+<html lang="id" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Direktori siswa tidak tersedia · AIS Next</title>
+  <link rel="stylesheet" href="/assets/vendor/tabler/css/tabler.min.css">
+  <link rel="stylesheet" href="/assets/css/ais-next.css">
+</head>
+<body><header th:replace="~{fragments/navigation :: topbar}"></header>
+<main class="page-wrapper"><div class="container-xl py-4">
+  <nav aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="/dashboard">Dasbor</a></li><li class="breadcrumb-item"><a href="/academic/students">Direktori siswa</a></li><li class="breadcrumb-item active">Tidak tersedia</li></ol></nav>
+  <div class="empty"><div class="empty-header">503</div><p class="empty-title">Direktori siswa sementara tidak tersedia</p><p class="empty-subtitle text-secondary">Koneksi data sedang terganggu. Tidak ada perubahan yang dilakukan; silakan coba lagi.</p><div class="empty-action"><a class="btn btn-primary" href="/academic/students">Coba lagi</a></div></div>
+</div></main><div id="a11y-live" class="visually-hidden" aria-live="assertive">Direktori siswa sementara tidak tersedia</div>
+</body></html>

@@ -30,4 +30,21 @@ class PhaseTwoRoutesTest {
             assertThat(decision.writeOwnership()).isEqualTo(WriteOwnership.LEGACY_WRITE);
         });
     }
+
+    /** Confirms both student-directory prefixes are governed and legacy-owned by default. */
+    @Test
+    void keepsAcademicDirectoryLegacyOwnedInSafeFallback() {
+        assertThat(PhaseTwoRoutes.academicReadPrefixes())
+                .containsExactly("/academic/students", "/api/v1/academic/students");
+        assertThat(PhaseTwoRoutes.governedPrefixes())
+                .containsAll(PhaseTwoRoutes.academicReadPrefixes());
+
+        List<TenantRouteDecision> academic = PhaseTwoRoutes.localSafeDecisions().stream()
+                .filter(decision -> decision.moduleKey().equals("academic-core"))
+                .toList();
+        assertThat(academic).hasSize(2).allSatisfy(decision -> {
+            assertThat(decision.owner()).isEqualTo(RouteOwner.LEGACY);
+            assertThat(decision.writeOwnership()).isEqualTo(WriteOwnership.LEGACY_WRITE);
+        });
+    }
 }

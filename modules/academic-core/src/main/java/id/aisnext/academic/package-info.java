@@ -1,6 +1,3 @@
-/**
- * Spring Modulith boundary for transactional academic aggregates introduced only after legacy
- * schema and write-ownership audits are complete.
- */
+/** Spring Modulith boundary for audited academic read models and future owned aggregates. */
 @org.springframework.modulith.ApplicationModule(displayName = "Academic Core")
 package id.aisnext.academic;
