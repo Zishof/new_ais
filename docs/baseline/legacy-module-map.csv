@@ -1,0 +1,9 @@
+bounded_context,legacy_evidence,target_module,initial_mode,priority,rationale
+identity,"Tbmuser,Tbmrole,job_has_menu,role_privilage",modules/identity,NEXT_READ_ONLY,1,"Required for handoff, role parity, and menu projection"
+tenant,"Pendaftar,PendaftaranTenant,TenantRegistry,TenantDomain",platform/platform-tenant,LEGACY_WRITE,1,"Compatibility seed for control-plane; legacy tables remain immutable"
+organization,"satuan kerja,fakultas,jurusan,sekolah,yayasan",modules/organization,NEXT_READ_ONLY,2,"Low-risk reference data candidate after complete mapping audit"
+attendance,"presensi/kehadiran menu and domain sources",modules/attendance,LEGACY_WRITE,3,"Candidate vertical business slice after master CRUD proof"
+academic,"student,curriculum,schedule,assessment sources",modules/academic-core,LEGACY_WRITE,4,"High coupling and hidden rules; migrate after foundation"
+integration,"Axis,Jersey,servlet,ISO8583,payment callbacks",modules/integration,LEGACY_WRITE,4,"Needs consumer registry, signatures, idempotency, and contract tests"
+files,"repository,journal,file streaming",platform/platform-files,NEXT_READ_ONLY,3,"Separate FILE routing and saga required; no XA"
+finance,"payment,accounting,POS",future module,LEGACY_WRITE,6,"Highest operational and reconciliation risk"

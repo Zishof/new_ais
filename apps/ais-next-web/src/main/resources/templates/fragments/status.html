@@ -1,0 +1,10 @@
+<!doctype html>
+<html lang="id" xmlns:th="http://www.thymeleaf.org">
+<body>
+<span th:fragment="active(value)" class="badge" th:classappend="${value} ? 'ais-status-active' : 'ais-status-inactive'"
+      th:text="${value} ? 'Aktif' : 'Nonaktif'">Aktif</span>
+<div th:fragment="empty(message)" class="empty" role="status">
+  <p class="empty-title" th:text="${message}">Tidak ada data</p>
+</div>
+</body>
+</html>

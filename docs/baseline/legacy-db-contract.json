@@ -1,0 +1,77 @@
+{
+  "capturedAt": "2026-09-03T23:20:00+07:00",
+  "connection": {
+    "host": "localhost",
+    "port": 5432,
+    "database": "ais",
+    "server": "PostgreSQL 16.4",
+    "inspectionMode": "default_transaction_read_only=on",
+    "credentialsStored": false
+  },
+  "schema": {
+    "tableCount": 3459,
+    "columnCount": 54942,
+    "ddlExecuted": false
+  },
+  "sliceTables": {
+    "tbmrole": {
+      "primaryKey": ["roleid"],
+      "columnsUsed": {
+        "roleid": "varchar(255) not null",
+        "rolename": "varchar(255) null",
+        "aktif": "boolean null"
+      },
+      "observedRows": 57,
+      "access": "read-only"
+    },
+    "job_has_menu": {
+      "primaryKey": ["job", "menu"],
+      "foreignKeys": {"job": "tbmrole.roleid", "menu": "menu.id"},
+      "observedRows": 3489,
+      "access": "read-only"
+    },
+    "menu": {
+      "primaryKey": ["id"],
+      "idDefault": "nextval('menu_temp_id_seq'::regclass)",
+      "columnsUsed": {
+        "id": "integer not null",
+        "label": "varchar(100) null",
+        "url": "varchar(100) null",
+        "root": "bigint null",
+        "child": "bigint null",
+        "aktif": "boolean null",
+        "nomorurut": "integer null"
+      },
+      "observedRows": 1305,
+      "access": "read-only"
+    },
+    "role_privilage": {
+      "primaryKey": ["id"],
+      "foreignKeys": {"role": "tbmrole.roleid", "menu": "menu.id"},
+      "privilegeColumns": ["_read", "_create", "_update", "_delete", "_approve", "_reject"],
+      "observedRows": 4486,
+      "access": "read-only"
+    },
+    "tbmuser": {
+      "primaryKey": ["userid"],
+      "roleColumns": ["userrole", "user_role2", "user_role3", "user_role4", "user_role5"],
+      "observedRows": 25,
+      "access": "contract inspected; authentication write path not implemented"
+    },
+    "tenant_registry": {
+      "primaryKey": ["id"],
+      "uniqueColumns": ["code", "slug", "schema_name", "audit_schema_name"],
+      "compatibility": "inspected only; not mutated"
+    },
+    "tenant_domain": {
+      "primaryKey": ["id"],
+      "uniqueColumns": ["normalized_domain"],
+      "compatibility": "inspected only; not mutated"
+    }
+  },
+  "invariants": [
+    "No CREATE, ALTER, DROP, trigger, rename, sequence change, or hbm2ddl update on legacy databases.",
+    "AIS Next legacy descriptors remain read-only until aggregate ownership is explicitly changed after clone-based parity tests.",
+    "Control-plane migrations target ais_next_control only."
+  ]
+}

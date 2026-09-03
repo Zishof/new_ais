@@ -1,0 +1,21 @@
+surface,name_or_pattern,technology,consumer_status,migration_rule,evidence
+UI,*.zul,ZK Loader,internal browser users,keep on legacy until route-level cutover,web.xml
+UI,/zi/*,ZK AU engine,internal browser users,never proxy partially inside an AU request,web.xml
+SOAP,/services/*,Apache Axis,unknown inventory required,preserve contract and version replacement,web.xml
+SOAP,*.jws,Apache Axis,unknown inventory required,preserve contract and version replacement,web.xml
+REST,/resources/*,Jersey,unknown mobile/integration consumers,contract-test before routing,web.xml
+SSO,/api/sso/kubuku,Servlet,external Kubuku,retain exact legacy response until consumer sign-off,web.xml
+AUTH,/login,Servlet,browser users,add one-time signed handoff without serialized-session sharing,web.xml
+AUTH,/logout,Servlet,browser users,coordinate logout and session rotation,web.xml
+PORTAL,/web/*,Servlet/JSP,public site,route as an indivisible surface,web.xml
+SCHOOL,/sekolah/*,Servlet/JSP,public school site,route as an indivisible surface,web.xml
+LIBRARY,/pustaka,Servlet,library users,audit authentication and file access first,web.xml
+REPOSITORY,/repository/*,Servlet,repository users,preserve OAI/file URLs and authorization,web.xml
+JOURNAL,/jurnal/*,Servlet,journal users,preserve public identifiers and callbacks,web.xml
+JOURNAL_API,/jurnal-api/*,Servlet,external/admin clients,register consumers before deprecation,web.xml
+JOURNAL_FILE,/jurnal-file/*,Servlet,file consumers,stream from FILE datasource only,web.xml
+PAYMENT,/jurnal-payment-callback,Servlet,payment provider,idempotency and signature contract required,web.xml
+PMB,/pmb,Servlet/JSP,applicants,migrate only after Pendaftar workflow audit,web.xml
+PPDB,/ppdb,Servlet/JSP,applicants,migrate only after Pendaftar workflow audit,web.xml
+POS,/pos,Servlet,POS users,finance-risk; defer until mature,web.xml
+GENERIC,182 servlet mappings,mixed,unclassified,complete consumer registry per selected module,web.xml structural count

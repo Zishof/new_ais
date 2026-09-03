@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="id" xmlns:th="http://www.thymeleaf.org">
+<body>
+<nav th:fragment="breadcrumb(current)" aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="/dashboard">Dasbor</a></li>
+    <li class="breadcrumb-item active" aria-current="page" th:text="${current}">Halaman</li>
+  </ol>
+</nav>
+
+<aside th:fragment="sidebar" class="navbar navbar-vertical" aria-label="Navigasi samping">
+  <div class="container-fluid">
+    <a class="nav-link" href="/dashboard">Dasbor</a>
+    <a class="nav-link" href="/roles">Grup pengguna</a>
+  </div>
+</aside>
+
+<form th:fragment="filterBar(action,query)" class="card card-sm" method="get" th:action="${action}" role="search">
+  <div class="card-body"><div class="input-group">
+    <label class="visually-hidden" for="shared-filter-query">Cari data</label>
+    <input id="shared-filter-query" name="q" class="form-control" th:value="${query}" placeholder="Cari">
+    <button class="btn btn-primary" type="submit">Cari</button>
+  </div></div>
+</form>
+
+<div th:fragment="responsiveTable(caption)" class="table-responsive">
+  <table class="table table-vcenter card-table">
+    <caption class="visually-hidden" th:text="${caption}">Daftar data</caption>
+    <tbody th:insert="~{::content}"></tbody>
+  </table>
+</div>
+
+<div th:fragment="loading(message)" class="placeholder-glow" role="status" aria-live="polite">
+  <span class="placeholder col-6"></span>
+  <span class="visually-hidden" th:text="${message}">Memuat data</span>
+</div>
+
+<div th:fragment="error(message)" class="alert alert-danger" role="alert" th:text="${message}">
+  Data gagal dimuat.
+</div>
+
+<section th:fragment="formSection(title)" class="card mb-3">
+  <div class="card-header"><h2 class="card-title" th:text="${title}">Bagian formulir</h2></div>
+  <div class="card-body" th:insert="~{::content}"></div>
+</section>
+
+<div th:fragment="advancedFilterDrawer(title)" class="offcanvas offcanvas-end" tabindex="-1"
+     aria-labelledby="advanced-filter-title">
+  <div class="offcanvas-header">
+    <h2 id="advanced-filter-title" class="offcanvas-title" th:text="${title}">Filter lanjutan</h2>
+    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Tutup"></button>
+  </div>
+  <div class="offcanvas-body" th:insert="~{::content}"></div>
+</div>
+
+<dialog th:fragment="lookupDialog(title)" class="modal-dialog" aria-labelledby="lookup-title">
+  <h2 id="lookup-title" th:text="${title}">Pilih data</h2>
+  <div th:insert="~{::content}"></div>
+  <form method="dialog"><button class="btn" type="submit">Tutup</button></form>
+</dialog>
+
+<ol th:fragment="auditTimeline(events)" class="timeline" aria-label="Riwayat audit">
+  <li th:each="event : ${events}" class="timeline-event">
+    <span th:text="${event.actor}">Aktor</span>
+    <time th:datetime="${event.time}" th:text="${event.time}">Waktu</time>
+    <span th:text="${event.action}">Aksi</span>
+  </li>
+</ol>
+
+<div th:fragment="confirmation(id,title,message)" class="modal" tabindex="-1" th:id="${id}"
+     role="dialog" aria-modal="true" th:attr="aria-labelledby=${id + '-title'}">
+  <div class="modal-dialog"><div class="modal-content">
+    <div class="modal-header"><h2 class="modal-title" th:id="${id + '-title'}" th:text="${title}">Konfirmasi</h2></div>
+    <div class="modal-body" th:text="${message}">Lanjutkan tindakan?</div>
+  </div></div>
+</div>
+
+<div th:fragment="toast(message)" class="toast" role="status" aria-live="polite" aria-atomic="true">
+  <div class="toast-body" th:text="${message}">Operasi selesai.</div>
+</div>
+
+<div th:fragment="liveRegion" class="visually-hidden" aria-live="polite" aria-atomic="true"></div>
+</body>
+</html>

@@ -1,0 +1,16 @@
+<!doctype html>
+<html lang="id" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Detail grup · AIS Next</title><link rel="stylesheet" href="/assets/vendor/tabler/css/tabler.min.css"><link rel="stylesheet" href="/assets/css/ais-next.css">
+</head>
+<body><header th:replace="~{fragments/navigation :: topbar}"></header>
+<main class="page-wrapper"><div class="container-xl py-4">
+  <nav aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="/roles">Grup pengguna</a></li><li class="breadcrumb-item active" th:text="${role.id}">ID</li></ol></nav>
+  <div class="page-header"><div><h1 class="page-title" th:text="${role.name}">Nama</h1><div class="text-secondary" th:text="${role.id}">ID</div></div><span th:replace="~{fragments/status :: active(${role.active})}"></span></div>
+  <div class="card mt-3"><div class="card-header"><h2 class="card-title">Menu dan privilege</h2></div><div class="table-responsive"><table class="table table-sm table-vcenter card-table">
+    <thead><tr><th>Menu</th><th>Route legacy</th><th>Baca</th><th>Buat</th><th>Ubah</th><th>Hapus</th><th>Setujui</th></tr></thead>
+    <tbody><tr th:each="menu : ${role.menus}"><td th:text="${menu.label}">Menu</td><td><code th:text="${menu.legacyUrl}">url</code></td>
+      <td th:text="${menu.readable} ? 'Ya' : 'Tidak'"></td><td th:text="${menu.creatable} ? 'Ya' : 'Tidak'"></td><td th:text="${menu.updatable} ? 'Ya' : 'Tidak'"></td><td th:text="${menu.deletable} ? 'Ya' : 'Tidak'"></td><td th:text="${menu.approvable} ? 'Ya' : 'Tidak'"></td></tr></tbody>
+  </table></div></div>
+</div></main></body></html>

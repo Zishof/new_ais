@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="id" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dasbor · AIS Next</title><link rel="stylesheet" href="/assets/vendor/tabler/css/tabler.min.css">
+  <link rel="stylesheet" href="/assets/css/ais-next.css"><script defer src="/assets/vendor/htmx/htmx.min.js"></script>
+</head>
+<body><header th:replace="~{fragments/navigation :: topbar}"></header>
+<main class="page-wrapper"><div class="container-xl py-4">
+  <nav aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item active">Dasbor</li></ol></nav>
+  <div class="page-header"><h1 class="page-title">Selamat datang</h1></div>
+  <div class="row row-cards mt-1">
+    <div class="col-sm-6"><div class="card"><div class="card-body"><div class="subheader">Tenant</div><div class="h2" th:text="${tenant.displayName}">AIS Local</div></div></div></div>
+    <div class="col-sm-6"><div class="card"><div class="card-body"><div class="subheader">Mode</div><div class="h2" th:text="${tenant.mode}">HYBRID</div></div></div></div>
+  </div>
+  <div class="alert alert-info mt-3" role="status">Slice pertama bersifat read-only. Database legacy tidak menerima DDL atau write dari layar ini.</div>
+</div></main><div id="a11y-live" class="visually-hidden" aria-live="polite"></div>
+</body></html>

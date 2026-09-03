@@ -1,0 +1,7 @@
+# Maven coordinates/patterns prohibited without a replacement ADR and legal approval.
+com.vaadin:*
+com.vaadin.pro:*
+org.webjars.npm:vaadin__*
+*:*testbench*
+*:*grid-pro*
+*:*spreadsheet*

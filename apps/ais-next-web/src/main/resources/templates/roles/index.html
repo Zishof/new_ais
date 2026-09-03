@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="id" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Grup pengguna · AIS Next</title><link rel="stylesheet" href="/assets/vendor/tabler/css/tabler.min.css">
+  <link rel="stylesheet" href="/assets/css/ais-next.css"><script defer src="/assets/vendor/htmx/htmx.min.js"></script>
+</head>
+<body><header th:replace="~{fragments/navigation :: topbar}"></header>
+<main class="page-wrapper"><div class="container-xl py-4">
+  <nav aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="/dashboard">Dasbor</a></li><li class="breadcrumb-item active">Grup pengguna</li></ol></nav>
+  <div class="page-header"><h1 class="page-title">Grup pengguna legacy</h1></div>
+  <form class="card card-sm mt-3" method="get" action="/roles"><div class="card-body"><div class="input-group">
+    <label class="visually-hidden" for="q">Cari grup pengguna</label><input id="q" name="q" class="form-control" th:value="${query}" placeholder="Cari ID atau nama">
+    <button class="btn btn-primary" type="submit">Cari</button></div></div></form>
+  <div class="card mt-3"><div class="table-responsive"><table class="table table-vcenter card-table">
+    <thead><tr><th>ID</th><th>Nama</th><th>Status</th><th><span class="visually-hidden">Aksi</span></th></tr></thead>
+    <tbody><tr th:each="role : ${result.items}"><td th:text="${role.id}">id</td><td th:text="${role.name}">nama</td>
+      <td><span th:replace="~{fragments/status :: active(${role.active})}"></span></td>
+      <td class="text-end"><a th:href="@{/roles/{id}(id=${role.id})}">Detail</a></td></tr></tbody>
+  </table></div><div th:if="${result.items.empty}"><div th:replace="~{fragments/status :: empty('Tidak ada grup pengguna yang cocok')}"></div></div></div>
+  <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mt-3">
+    <p class="text-secondary mb-0" th:text="|Total ${result.total} baris · halaman ${result.page + 1} dari ${result.totalPages == 0 ? 1 : result.totalPages}|">Total</p>
+    <nav aria-label="Paginasi grup pengguna" th:if="${result.totalPages > 1}">
+      <ul class="pagination mb-0">
+        <li class="page-item" th:classappend="${result.page == 0} ? 'disabled'">
+          <span class="page-link" th:if="${result.page == 0}" aria-disabled="true">Sebelumnya</span>
+          <a class="page-link" th:if="${result.page > 0}"
+             th:href="@{/roles(page=${result.page - 1},size=${result.size},q=${query})}" rel="prev">Sebelumnya</a>
+        </li>
+        <li class="page-item" th:classappend="${result.page + 1 >= result.totalPages} ? 'disabled'">
+          <span class="page-link" th:if="${result.page + 1 >= result.totalPages}" aria-disabled="true">Berikutnya</span>
+          <a class="page-link" th:if="${result.page + 1 < result.totalPages}"
+             th:href="@{/roles(page=${result.page + 1},size=${result.size},q=${query})}" rel="next">Berikutnya</a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</div></main><div id="a11y-live" class="visually-hidden" aria-live="polite"></div>
+</body></html>

@@ -1,0 +1,41 @@
+{
+  "capturedAt": "2026-09-03T23:35:00+07:00",
+  "sourcePath": "C:/opt/AIS/ais",
+  "sourceAuthority": "local checkout supplied by operator",
+  "gitMetadata": {
+    "available": false,
+    "reason": "No .git directory exists in C:/opt/AIS or C:/opt/AIS/ais",
+    "packageReferenceCommit": "5806b35fb24c6c94446d784403bdc1a99c532c5e",
+    "packageReferenceSvnRevision": "r83944",
+    "referenceOnly": true
+  },
+  "inventory": {
+    "mainJavaFiles": 15051,
+    "testJavaFiles": 20,
+    "jspFiles": 10372,
+    "zulFiles": 1558,
+    "xmlFilesInTree": 42,
+    "servletsDeclaredInWebXml": 164,
+    "servletMappingsInWebXml": 182,
+    "filtersDeclaredInWebXml": 6,
+    "filterMappingsInWebXml": 13
+  },
+  "entrypoints": {
+    "webXml": "src/main/webapp/WEB-INF/web.xml",
+    "build": "pom.xml"
+  },
+  "tenantFoundationSources": [
+    "src/main/java/ais/database/model/Pendaftar.java",
+    "src/main/java/ais/database/model/tenant/PendaftaranTenant.java",
+    "src/main/java/ais/database/model/tenant/TenantRegistry.java",
+    "src/main/java/ais/database/model/tenant/TenantDomain.java"
+  ],
+  "architecturePackage": {
+    "path": "C:/Users/Admin1/Downloads/Paket_Arsitektur_AIS_Next_Java_Modern_V1.zip",
+    "sha256": "98190CB22D16764B1CA8C9A1BAAD07C7235364806779F45E0606144CAD1CFE56"
+  },
+  "notes": [
+    "This is a structural inventory, not a claim that every source line was manually reviewed.",
+    "Generated/scratch directories were excluded from main/test source counts by scoping counts to src/main and src/test."
+  ]
+}

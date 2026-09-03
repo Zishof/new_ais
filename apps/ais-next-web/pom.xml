@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent><groupId>id.aisnext</groupId><artifactId>ais-next-parent</artifactId><version>0.1.0-SNAPSHOT</version><relativePath>../../pom.xml</relativePath></parent>
+    <artifactId>ais-next-web</artifactId>
+    <dependencies>
+        <dependency><groupId>id.aisnext</groupId><artifactId>platform-tenant</artifactId><version>${project.version}</version></dependency>
+        <dependency><groupId>id.aisnext</groupId><artifactId>platform-security</artifactId><version>${project.version}</version></dependency>
+        <dependency><groupId>id.aisnext</groupId><artifactId>platform-web</artifactId><version>${project.version}</version></dependency>
+        <dependency><groupId>id.aisnext</groupId><artifactId>platform-api</artifactId><version>${project.version}</version></dependency>
+        <dependency><groupId>id.aisnext</groupId><artifactId>platform-audit</artifactId><version>${project.version}</version></dependency>
+        <dependency><groupId>id.aisnext</groupId><artifactId>platform-observability</artifactId><version>${project.version}</version></dependency>
+        <dependency><groupId>id.aisnext</groupId><artifactId>platform-files</artifactId><version>${project.version}</version></dependency>
+        <dependency><groupId>id.aisnext</groupId><artifactId>legacy-identity-adapter</artifactId><version>${project.version}</version></dependency>
+        <dependency><groupId>id.aisnext</groupId><artifactId>legacy-rbac-adapter</artifactId><version>${project.version}</version></dependency>
+        <dependency><groupId>id.aisnext</groupId><artifactId>legacy-api-facade</artifactId><version>${project.version}</version></dependency>
+        <dependency><groupId>id.aisnext</groupId><artifactId>legacy-file-adapter</artifactId><version>${project.version}</version></dependency>
+        <dependency><groupId>id.aisnext</groupId><artifactId>organization</artifactId><version>${project.version}</version></dependency>
+        <dependency><groupId>id.aisnext</groupId><artifactId>identity</artifactId><version>${project.version}</version></dependency>
+        <dependency><groupId>id.aisnext</groupId><artifactId>academic-core</artifactId><version>${project.version}</version></dependency>
+        <dependency><groupId>id.aisnext</groupId><artifactId>attendance</artifactId><version>${project.version}</version></dependency>
+        <dependency><groupId>id.aisnext</groupId><artifactId>integration</artifactId><version>${project.version}</version></dependency>
+        <dependency><groupId>org.springframework.boot</groupId><artifactId>spring-boot-starter-actuator</artifactId></dependency>
+        <dependency><groupId>org.springframework.boot</groupId><artifactId>spring-boot-starter-flyway</artifactId></dependency>
+        <dependency><groupId>org.springframework.boot</groupId><artifactId>spring-boot-starter-jdbc</artifactId></dependency>
+        <dependency><groupId>org.springframework.boot</groupId><artifactId>spring-boot-starter-security</artifactId></dependency>
+        <dependency><groupId>org.springframework.boot</groupId><artifactId>spring-boot-starter-thymeleaf</artifactId></dependency>
+        <dependency><groupId>org.springframework.boot</groupId><artifactId>spring-boot-starter-validation</artifactId></dependency>
+        <dependency><groupId>org.springframework.boot</groupId><artifactId>spring-boot-starter-webmvc</artifactId></dependency>
+        <dependency><groupId>org.flywaydb</groupId><artifactId>flyway-database-postgresql</artifactId></dependency>
+        <dependency><groupId>org.springdoc</groupId><artifactId>springdoc-openapi-starter-webmvc-ui</artifactId><version>${springdoc.version}</version></dependency>
+        <dependency><groupId>org.springframework.modulith</groupId><artifactId>spring-modulith-starter-core</artifactId></dependency>
+        <dependency><groupId>org.springframework.modulith</groupId><artifactId>spring-modulith-actuator</artifactId><scope>runtime</scope></dependency>
+        <dependency><groupId>org.springframework.modulith</groupId><artifactId>spring-modulith-observability-core</artifactId><scope>runtime</scope></dependency>
+        <dependency><groupId>org.springframework.modulith</groupId><artifactId>spring-modulith-runtime</artifactId><scope>runtime</scope></dependency>
+        <dependency><groupId>io.micrometer</groupId><artifactId>micrometer-registry-otlp</artifactId><scope>runtime</scope></dependency>
+        <dependency><groupId>org.postgresql</groupId><artifactId>postgresql</artifactId><scope>runtime</scope></dependency>
+        <dependency><groupId>org.springframework.modulith</groupId><artifactId>spring-modulith-starter-test</artifactId><scope>test</scope></dependency>
+        <dependency><groupId>org.springframework.boot</groupId><artifactId>spring-boot-starter-webmvc-test</artifactId><scope>test</scope></dependency>
+        <dependency><groupId>org.springframework.boot</groupId><artifactId>spring-boot-starter-security-test</artifactId><scope>test</scope></dependency>
+        <dependency><groupId>org.springframework.boot</groupId><artifactId>spring-boot-testcontainers</artifactId><scope>test</scope></dependency>
+        <dependency><groupId>org.testcontainers</groupId><artifactId>testcontainers-junit-jupiter</artifactId><scope>test</scope></dependency>
+        <dependency><groupId>org.testcontainers</groupId><artifactId>testcontainers-postgresql</artifactId><scope>test</scope></dependency>
+    </dependencies>
+    <build><plugins><plugin><groupId>org.springframework.boot</groupId><artifactId>spring-boot-maven-plugin</artifactId></plugin></plugins></build>
+</project>
