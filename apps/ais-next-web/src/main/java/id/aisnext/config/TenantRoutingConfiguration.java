@@ -14,6 +14,8 @@ import id.aisnext.websupport.infrastructure.TenantRouteGateFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.simple.JdbcClient;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.transaction.PlatformTransactionManager;
 
 /**
  * Wires trusted tenant resolution, lazy datasource creation, and role-specific JDBC clients.
@@ -89,6 +91,17 @@ public class TenantRoutingConfiguration {
      */
     @Bean(name = "fileJdbcClient") JdbcClient fileJdbcClient(FileRoutingDataSource dataSource) {
         return JdbcClient.create(dataSource);
+    }
+
+    /**
+     * Creates transaction boundaries over the tenant-selected CORE datasource.
+     *
+     * @param dataSource CORE routing datasource that resolves from trusted tenant context
+     * @return transaction manager used by bounded legacy-compatible aggregate writes
+     */
+    @Bean(name = "coreTransactionManager") PlatformTransactionManager coreTransactionManager(
+            CoreRoutingDataSource dataSource) {
+        return new DataSourceTransactionManager(dataSource);
     }
 
     /**

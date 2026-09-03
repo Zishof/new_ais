@@ -62,9 +62,11 @@ audited entities. The entity audit primary key is `(id, rev)`, with `revtype` va
 1=update, and 2=delete.
 
 The inspected source contains no historical audit row for this entity. Parity must therefore be
-proved on a clone. The business mutation, audit revision, audit snapshot, and AIS Next control
-audit event must commit or roll back together. Direct JDBC writes without both audit records are
-forbidden.
+proved on a clone. The business mutation, shared Envers revision, and entity audit snapshot must
+commit or roll back together in the CORE database. Direct JDBC writes without those legacy audit
+records are forbidden. An independent control-plane audit projection cannot be made atomic across
+two PostgreSQL databases without XA; it remains a production gate until an outbox/reconciliation
+design is approved and must never be described as part of the CORE atomic commit.
 
 ## Clone-only acceptance gates
 
@@ -74,12 +76,13 @@ source fingerprints. Then prove:
 1. List, filter, page, and sort parity, including null-active semantics.
 2. Independent READ/CREATE/UPDATE/DELETE authorization and bulk-operation authorization.
 3. Required-field, duplicate-name, missing-level, and foreign-key validation.
-4. Create/update/active-toggle/delete audit revisions and atomic rollback on audit failure.
+4. Create/update/active-toggle/delete Envers revisions and atomic rollback on audit failure.
 5. Lost-update rejection through an explicit version token derived from the row snapshot.
 6. Next-to-database visibility and database-to-Next visibility on the clone.
 7. Referenced-row deletion returns conflict without changing business or audit data.
 8. Route rollback survives an application restart without changing write ownership.
 9. The source `ais` row counts and fingerprints remain unchanged.
 
-Production promotion remains blocked until a business owner accepts the UAT behavior and the
-legacy UI/cache reverse-visibility test has evidence.
+Production promotion remains blocked until a business owner accepts the UAT behavior, the legacy
+UI/cache reverse-visibility test has evidence, and the independent control-audit/outbox gap has an
+approved design.

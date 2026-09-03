@@ -1,6 +1,10 @@
 package id.aisnext.config;
 
 import static id.aisnext.identity.application.HandoffAuthorizationService.ROLE_DIRECTORY_READ_AUTHORITY;
+import static id.aisnext.organization.api.SchoolTypeAuthorities.CREATE;
+import static id.aisnext.organization.api.SchoolTypeAuthorities.DELETE;
+import static id.aisnext.organization.api.SchoolTypeAuthorities.READ;
+import static id.aisnext.organization.api.SchoolTypeAuthorities.UPDATE;
 
 import id.aisnext.security.api.HandoffTokenService;
 import id.aisnext.security.api.NonceStore;
@@ -8,6 +12,7 @@ import java.nio.charset.StandardCharsets;
 import java.time.Clock;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
@@ -63,6 +68,17 @@ public class SecurityConfiguration {
         http.authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/", "/error", "/auth/handoff", "/assets/**", "/actuator/health/**").permitAll()
                         .requestMatchers("/api/openapi.json", "/api/docs/**", "/swagger-ui/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/school-types/new").hasAuthority(CREATE)
+                        .requestMatchers(HttpMethod.GET, "/school-types/*/edit").hasAuthority(UPDATE)
+                        .requestMatchers(HttpMethod.POST, "/school-types").hasAuthority(CREATE)
+                        .requestMatchers(HttpMethod.POST, "/school-types/*/delete").hasAuthority(DELETE)
+                        .requestMatchers(HttpMethod.POST, "/school-types/*").hasAuthority(UPDATE)
+                        .requestMatchers(HttpMethod.GET, "/school-types/**", "/api/v1/school-types/**")
+                        .hasAuthority(READ)
+                        .requestMatchers(HttpMethod.POST, "/api/v1/school-types").hasAuthority(CREATE)
+                        .requestMatchers(HttpMethod.PUT, "/api/v1/school-types/*").hasAuthority(UPDATE)
+                        .requestMatchers(HttpMethod.DELETE, "/api/v1/school-types/*").hasAuthority(DELETE)
+                        .requestMatchers("/school-types/**", "/api/v1/school-types/**").denyAll()
                         .requestMatchers("/roles/**", "/api/v1/roles/**", "/search", "/api/v1/search")
                         .hasAuthority(ROLE_DIRECTORY_READ_AUTHORITY)
                         .anyRequest().authenticated())

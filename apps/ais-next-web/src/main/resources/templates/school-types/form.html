@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="id" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title th:text="${item == null ? 'Tambah jenis sekolah · AIS Next' : 'Ubah jenis sekolah · AIS Next'}">Jenis sekolah · AIS Next</title>
+  <link rel="stylesheet" href="/assets/vendor/tabler/css/tabler.min.css"><link rel="stylesheet" href="/assets/css/ais-next.css">
+</head>
+<body><header th:replace="~{fragments/navigation :: topbar}"></header>
+<main class="page-wrapper"><div class="container-xl py-4">
+  <nav aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="/dashboard">Dasbor</a></li><li class="breadcrumb-item"><a href="/school-types">Jenis sekolah</a></li><li class="breadcrumb-item active" th:text="${item == null ? 'Tambah' : 'Ubah'}">Form</li></ol></nav>
+  <div class="page-header"><h1 class="page-title" th:text="${item == null ? 'Tambah jenis sekolah' : 'Ubah jenis sekolah'}">Jenis sekolah</h1></div>
+  <form class="card mt-3" method="post" th:action="${item == null} ? @{/school-types} : @{/school-types/{id}(id=${item.id})}">
+    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"><input type="hidden" name="versionToken" th:if="${item != null}" th:value="${item.versionToken}">
+    <div class="card-body"><div class="row g-3">
+      <div class="col-12"><label class="form-label required" for="name">Nama jenis sekolah</label><input id="name" name="name" class="form-control" maxlength="255" required autofocus th:value="${item?.name}"></div>
+      <div class="col-12 col-md-6"><label class="form-label required" for="levelId">Jenjang</label><select id="levelId" name="levelId" class="form-select" required><option value="">Pilih jenjang</option><option th:each="level : ${levels}" th:value="${level.id}" th:selected="${item != null and item.levelId == level.id}" th:text="${level.active ? level.name : level.name + ' (nonaktif, sedang digunakan)'}">Jenjang</option></select></div>
+      <div class="col-12 col-md-6 d-flex align-items-end"><label class="form-check mb-2"><input class="form-check-input" type="checkbox" name="active" value="true" th:checked="${item == null or item.active}"><span class="form-check-label">Aktif</span></label></div>
+      <div class="col-12"><label class="form-label" for="description">Keterangan</label><textarea id="description" name="description" class="form-control" maxlength="255" rows="3" th:text="${item?.description}"></textarea></div>
+    </div></div>
+    <div class="card-footer d-flex gap-2"><button class="btn btn-primary" type="submit">Simpan</button><a class="btn btn-outline-secondary" href="/school-types">Batal</a></div>
+  </form>
+</div></main>
+</body></html>
