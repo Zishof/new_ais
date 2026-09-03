@@ -10,7 +10,9 @@ import org.springframework.stereotype.Component;
  * Idempotently registers the localhost smoke-test tenant in the AIS Next control plane.
  *
  * <p>The runner writes only control-plane metadata. It records legacy CORE and FILE connections as
- * read-only descriptors and never executes DDL or DML against either legacy database.</p>
+ * read-only descriptors and never executes DDL or DML against either legacy database. Existing
+ * hostnames owned by another tenant are never reassigned, and an existing primary hostname is
+ * retained.</p>
  */
 @Component
 @ConditionalOnProperty(name = {"ais.control.enabled", "ais.tenant.local.bootstrap"}, havingValue = "true", matchIfMissing = true)
@@ -45,9 +47,14 @@ public class LocalTenantBootstrap implements ApplicationRunner {
         for (String host : new String[] {"localhost", "127.0.0.1"}) {
             control.sql("""
                     insert into tenant_domain (tenant_id, domain, normalized_domain, type, status, primary_domain)
-                    values (:tenant, :host, :host, 'SUBDOMAIN', 'ACTIVE', :primary)
-                    on conflict (normalized_domain) do update set tenant_id = excluded.tenant_id, status = 'ACTIVE'
-                    """).param("tenant", tenantId).param("host", host).param("primary", host.equals("localhost")).update();
+                    values (:tenant, :host, :host, 'SUBDOMAIN', 'ACTIVE',
+                            :primary and not exists (
+                                select 1 from tenant_domain existing
+                                 where existing.tenant_id = :tenant and existing.primary_domain))
+                    on conflict (normalized_domain) do update set status = 'ACTIVE'
+                     where tenant_domain.tenant_id = excluded.tenant_id
+                    """).param("tenant", tenantId).param("host", host)
+                    .param("primary", host.equals("localhost")).update();
         }
         upsertDatabase(tenantId, "CORE", properties.getCoreJdbcUrl());
         upsertDatabase(tenantId, "FILE", properties.getFileJdbcUrl());

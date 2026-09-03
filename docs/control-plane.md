@@ -20,3 +20,8 @@ erDiagram
 `tenant_database` has exactly one descriptor per `(tenant, CORE|FILE)`. It stores a JDBC URL and credential reference, never the credential. `tenant_module_route` determines which application handles a route while `tenant_migration_state` tracks aggregate write ownership; these are related but deliberately separate controls. `security_handoff_nonce` atomically prevents token replay and stores only a SHA-256 nonce digest.
 
 Flyway migration `db/control/V1__control_plane.sql` creates these tables. It is wired to the explicitly named control datasource, not either routing datasource.
+
+The optional localhost bootstrap is idempotent and ownership-safe: it may reactivate a localhost
+domain already owned by the same tenant, but it never transfers a normalized hostname from another
+tenant and never creates a second primary domain. Non-local UAT tenants should keep the bootstrap
+disabled and use their explicitly registered test hostname.
