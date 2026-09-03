@@ -7,6 +7,7 @@ import static id.aisnext.organization.api.SchoolTypeAuthorities.CREATE;
 import static id.aisnext.organization.api.SchoolTypeAuthorities.DELETE;
 import static id.aisnext.organization.api.SchoolTypeAuthorities.READ;
 import static id.aisnext.organization.api.SchoolTypeAuthorities.UPDATE;
+import static id.aisnext.supporting.api.LibraryItemTypeAuthorities.READ_ITEM_TYPES;
 
 import id.aisnext.security.api.HandoffTokenService;
 import id.aisnext.security.api.NonceStore;
@@ -91,6 +92,9 @@ public class SecurityConfiguration {
                         .requestMatchers(HttpMethod.GET, "/academic/students",
                                 "/api/v1/academic/students").hasAuthority(READ_STUDENTS)
                         .requestMatchers("/academic/**", "/api/v1/academic/**").denyAll()
+                        .requestMatchers(HttpMethod.GET, "/supporting/library/item-types",
+                                "/api/v1/supporting/library/item-types").hasAuthority(READ_ITEM_TYPES)
+                        .requestMatchers("/supporting/**", "/api/v1/supporting/**").denyAll()
                         .requestMatchers("/roles/**", "/api/v1/roles/**", "/search", "/api/v1/search")
                         .hasAuthority(ROLE_DIRECTORY_READ_AUTHORITY)
                         .anyRequest().authenticated())

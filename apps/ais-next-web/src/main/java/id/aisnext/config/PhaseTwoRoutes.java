@@ -5,7 +5,7 @@ import id.aisnext.tenant.api.TenantRouteDecision;
 import id.aisnext.tenant.api.WriteOwnership;
 import java.util.List;
 
-/** Single source of truth for the identity prefixes governed during the read-only phase. */
+/** Single source of truth for every route prefix governed during incremental migration. */
 public final class PhaseTwoRoutes {
     private static final List<String> IDENTITY_READ_PREFIXES = List.of(
             "/roles",
@@ -23,6 +23,9 @@ public final class PhaseTwoRoutes {
     private static final List<String> ACADEMIC_READ_PREFIXES = List.of(
             "/academic/students",
             "/api/v1/academic/students");
+    private static final List<String> SUPPORTING_ERP_READ_PREFIXES = List.of(
+            "/supporting/library/item-types",
+            "/api/v1/supporting/library/item-types");
 
     /** Prevents instantiation of this static route catalog. */
     private PhaseTwoRoutes() {
@@ -65,14 +68,23 @@ public final class PhaseTwoRoutes {
     }
 
     /**
+     * Returns Supporting ERP prefixes reserved for the read-only Phase 6 item-type slice.
+     *
+     * @return immutable list of library item-type UI and API prefixes
+     */
+    public static List<String> supportingErpReadPrefixes() {
+        return SUPPORTING_ERP_READ_PREFIXES;
+    }
+
+    /**
      * Returns every request prefix that must have an explicit tenant route decision.
      *
-     * @return immutable identity and organization prefix list
+     * @return immutable prefix list across every governed migration module
      */
     public static List<String> governedPrefixes() {
         return java.util.stream.Stream.of(
                         IDENTITY_READ_PREFIXES, ORGANIZATION_WRITE_PREFIXES, ATTENDANCE_READ_PREFIXES,
-                        ACADEMIC_READ_PREFIXES)
+                        ACADEMIC_READ_PREFIXES, SUPPORTING_ERP_READ_PREFIXES)
                 .flatMap(List::stream)
                 .toList();
     }
@@ -99,7 +111,11 @@ public final class PhaseTwoRoutes {
                 .map(prefix -> new TenantRouteDecision(
                         "academic-core", prefix, RouteOwner.LEGACY, WriteOwnership.LEGACY_WRITE, 0L))
                 .toList();
-        return java.util.stream.Stream.of(identity, organization, attendance, academic)
+        List<TenantRouteDecision> supportingErp = SUPPORTING_ERP_READ_PREFIXES.stream()
+                .map(prefix -> new TenantRouteDecision(
+                        "supporting-erp", prefix, RouteOwner.LEGACY, WriteOwnership.LEGACY_WRITE, 0L))
+                .toList();
+        return java.util.stream.Stream.of(identity, organization, attendance, academic, supportingErp)
                 .flatMap(List::stream)
                 .toList();
     }

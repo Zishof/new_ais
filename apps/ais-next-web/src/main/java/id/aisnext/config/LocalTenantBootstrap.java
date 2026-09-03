@@ -114,6 +114,17 @@ public class LocalTenantBootstrap implements ApplicationRunner {
                     .param("prefix", prefix)
                     .update();
         }
+        for (String prefix : PhaseTwoRoutes.supportingErpReadPrefixes()) {
+            control.sql("""
+                    insert into tenant_module_route
+                        (tenant_id, module_key, route_pattern, route_owner, write_ownership)
+                    values (:tenant, 'supporting-erp', :prefix, 'LEGACY', 'LEGACY_WRITE')
+                    on conflict (tenant_id, module_key, route_pattern) do nothing
+                    """)
+                    .param("tenant", tenantId)
+                    .param("prefix", prefix)
+                    .update();
+        }
     }
 
     /**
