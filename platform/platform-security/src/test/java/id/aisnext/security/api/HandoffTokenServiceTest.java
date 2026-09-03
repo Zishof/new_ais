@@ -11,12 +11,18 @@ import java.time.Instant;
 import java.time.ZoneOffset;
 import org.junit.jupiter.api.Test;
 
+/** Unit tests for handoff claim integrity, expiry, and replay protection. */
 class HandoffTokenServiceTest {
     private final Instant now = Instant.parse("2026-09-03T12:00:00Z");
     private final HandoffTokenService service = new HandoffTokenService("ais-legacy", "ais-next",
             "0123456789abcdef0123456789abcdef".getBytes(StandardCharsets.UTF_8),
             new InMemoryNonceStore(Clock.fixed(now, ZoneOffset.UTC)), Clock.fixed(now, ZoneOffset.UTC));
 
+    /** Creates the deterministic handoff-token service test fixture. */
+    HandoffTokenServiceTest() {
+    }
+
+    /** Proves valid claims are recovered exactly and the same nonce cannot be consumed twice. */
     @Test void verifiesExpectedClaimsAndConsumesNonceOnce() {
         String token = service.issue(new HandoffClaims("ais-legacy", "ais-next", new TenantId("tenant-a"),
                 "user-1", "Akademik", "nonce-1", now.plusSeconds(60)));
@@ -25,6 +31,7 @@ class HandoffTokenServiceTest {
         assertThatThrownBy(() -> service.verifyAndConsume(token)).isInstanceOf(InvalidHandoffTokenException.class);
     }
 
+    /** Proves both an expired token and a signature-changing modification are rejected. */
     @Test void rejectsExpiredOrModifiedTokens() {
         String expired = service.issue(new HandoffClaims("ais-legacy", "ais-next", new TenantId("tenant-a"),
                 "user-1", "Akademik", "nonce-expired", now.minusSeconds(1)));

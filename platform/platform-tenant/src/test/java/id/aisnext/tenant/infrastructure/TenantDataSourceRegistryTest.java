@@ -11,8 +11,19 @@ import java.util.HashMap;
 import java.util.Map;
 import org.junit.jupiter.api.Test;
 
+/**
+ * Verifies the lazy-allocation contract of the tenant connection-pool registry.
+ */
 class TenantDataSourceRegistryTest {
-    @Test void oneThousandDescriptorsDoNotOpenTwoThousandPools() {
+    /** Creates the lazy pool-allocation test. */
+    TenantDataSourceRegistryTest() {
+    }
+
+    /**
+     * Ensures catalog size alone does not create pools before a tenant database is requested.
+     */
+    @Test
+    void oneThousandDescriptorsDoNotOpenTwoThousandPools() {
         Map<TenantDataSourceKey, TenantDatabaseDescriptor> descriptors = new HashMap<>();
         for (int i = 0; i < 1000; i++) {
             TenantId id = new TenantId("tenant-" + i);

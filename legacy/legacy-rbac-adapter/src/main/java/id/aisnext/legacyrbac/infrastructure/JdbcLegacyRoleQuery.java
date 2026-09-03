@@ -12,12 +12,29 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Repository;
 
+/**
+ * Parameterized JDBC read adapter for the legacy role, menu, and privilege tables.
+ *
+ * <p>All access is routed to the current tenant's read-only CORE datasource. The adapter preserves
+ * legacy identifiers and permission flags while normalizing nullable display values.</p>
+ */
 @Repository
 public class JdbcLegacyRoleQuery implements LegacyRoleQuery {
     private final JdbcClient core;
 
+    /**
+     * Creates the adapter with the tenant-aware CORE JDBC client.
+     *
+     * @param core JDBC client routed by trusted {@code TenantContext}
+     */
     public JdbcLegacyRoleQuery(@Qualifier("coreJdbcClient") JdbcClient core) { this.core = core; }
 
+    /**
+     * Filters and pages {@code tbmrole} without serializing persistence entities.
+     *
+     * @param query validated paging and case-insensitive filter parameters
+     * @return deterministic page of role summaries and matching total
+     */
     @Override public PageResult<LegacyRoleSummary> findRoles(PageQuery query) {
         String pattern = "%" + query.filter().toLowerCase(java.util.Locale.ROOT) + "%";
         long total = core.sql("""
@@ -40,6 +57,12 @@ public class JdbcLegacyRoleQuery implements LegacyRoleQuery {
         return new PageResult<>(roles, query.page(), query.size(), total);
     }
 
+    /**
+     * Loads one exact role and its effective, ordered menu privilege projection.
+     *
+     * @param roleId exact role identifier bound as a SQL parameter
+     * @return detailed role, or empty when the role does not exist
+     */
     @Override public Optional<LegacyRoleDetail> findRole(String roleId) {
         Optional<LegacyRoleSummary> role = core.sql("""
                 select roleid, coalesce(nullif(btrim(rolename), ''), roleid) as display_name,
@@ -51,6 +74,12 @@ public class JdbcLegacyRoleQuery implements LegacyRoleQuery {
         return role.map(summary -> new LegacyRoleDetail(summary.id(), summary.name(), summary.active(), menus(roleId)));
     }
 
+    /**
+     * Reads active legacy menus and role privileges without changing either table.
+     *
+     * @param roleId exact role identifier bound to both menu and privilege joins
+     * @return ordered immutable list of effective menu privileges
+     */
     private List<LegacyMenuPrivilege> menus(String roleId) {
         return core.sql("""
                 select m.id, coalesce(m.label, '') label, coalesce(m.url, '') url,

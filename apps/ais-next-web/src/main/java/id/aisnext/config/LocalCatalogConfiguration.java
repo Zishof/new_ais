@@ -17,9 +17,28 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+/**
+ * Provides a non-persistent tenant catalog for isolated development when the control plane is
+ * explicitly disabled.
+ *
+ * <p>Both legacy datasource descriptors are marked read-only. This fallback is not intended for
+ * production because nonce replay state is held only in memory.</p>
+ */
 @Configuration(proxyBeanMethods = false)
 @ConditionalOnProperty(name = "ais.control.enabled", havingValue = "false")
 public class LocalCatalogConfiguration {
+    /**
+     * Creates the Spring configuration definition for non-persistent local infrastructure.
+     */
+    public LocalCatalogConfiguration() {
+    }
+
+    /**
+     * Builds the single local tenant and its lazy CORE/FILE database descriptors.
+     *
+     * @param properties local tenant and database settings
+     * @return an immutable in-memory tenant catalog for {@code localhost} and {@code 127.0.0.1}
+     */
     @Bean TenantCatalog localTenantCatalog(LocalTenantProperties properties) {
         TenantId id = new TenantId(properties.getTenantKey());
         ResolvedTenant tenant = new ResolvedTenant(id, properties.getDisplayName(), TenantMode.HYBRID,
@@ -34,5 +53,10 @@ public class LocalCatalogConfiguration {
                                 properties.getCredentialReference(), properties.getMaximumPoolSize(), true)));
     }
 
+    /**
+     * Creates the development-only nonce store used when persistent control state is disabled.
+     *
+     * @return an in-memory, process-local one-time nonce store
+     */
     @Bean NonceStore inMemoryNonceStore() { return new InMemoryNonceStore(); }
 }

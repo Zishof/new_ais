@@ -9,6 +9,7 @@ import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.postgresql.PostgreSQLContainer;
 
+/** Verifies the control-plane migration against a disposable PostgreSQL 16 instance. */
 @Testcontainers(disabledWithoutDocker = true)
 class ControlPlaneMigrationTest {
     @Container
@@ -17,6 +18,17 @@ class ControlPlaneMigrationTest {
             .withUsername("ais_next")
             .withPassword("test-only");
 
+    /**
+     * Creates the control-plane migration integration test.
+     */
+    ControlPlaneMigrationTest() {
+    }
+
+    /**
+     * Applies Flyway and proves that all 13 application-owned control tables were created.
+     *
+     * @throws Exception when the container, migration, JDBC connection, or assertion query fails
+     */
     @Test
     void controlPlaneMigrationCreatesOnlyItsOwnedTables() throws Exception {
         Flyway.configure()

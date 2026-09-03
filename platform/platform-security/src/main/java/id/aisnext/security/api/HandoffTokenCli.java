@@ -5,9 +5,23 @@ import java.nio.charset.StandardCharsets;
 import java.time.Clock;
 import java.time.Instant;
 
+/**
+ * Operator-only command-line helper for issuing a short-lived local handoff token.
+ *
+ * <p>The command reads the signing key from {@code AIS_HANDOFF_SIGNING_KEY} and writes the token to
+ * standard output. Output must be treated as a credential and must not be committed or logged.</p>
+ */
 public final class HandoffTokenCli {
+    /** Prevents instantiation of this command-line utility. */
     private HandoffTokenCli() {}
 
+    /**
+     * Issues a 60-second token for manual smoke testing.
+     *
+     * @param args issuer, audience, tenant key, user ID, and active role ID in that order
+     * @throws IllegalArgumentException when exactly five arguments are not supplied
+     * @throws IllegalStateException when the signing-key environment variable is absent
+     */
     public static void main(String[] args) {
         if (args.length != 5) {
             throw new IllegalArgumentException("Usage: <issuer> <audience> <tenant> <user> <role>");

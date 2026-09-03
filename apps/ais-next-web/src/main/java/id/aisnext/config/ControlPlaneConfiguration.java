@@ -14,9 +14,29 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.simple.JdbcClient;
 
+/**
+ * Configures infrastructure owned exclusively by the AIS Next control plane.
+ *
+ * <p>This configuration never targets a tenant's legacy CORE or FILE database. It creates a small
+ * control datasource, validates and applies control-plane Flyway migrations, and exposes adapters
+ * for tenant metadata and one-time authentication nonces.</p>
+ */
 @Configuration(proxyBeanMethods = false)
 @ConditionalOnProperty(name = "ais.control.enabled", havingValue = "true", matchIfMissing = true)
 public class ControlPlaneConfiguration {
+    /**
+     * Creates the Spring configuration definition for control-plane infrastructure.
+     */
+    public ControlPlaneConfiguration() {
+    }
+
+    /**
+     * Creates the bounded connection pool used for control-plane metadata and nonce writes.
+     *
+     * @param properties validated connection and pool settings
+     * @return an eagerly initialized Hikari datasource closed by the Spring container
+     * @throws IllegalStateException when either required database credential is absent
+     */
     @Bean(destroyMethod = "close") HikariDataSource controlDataSource(ControlPlaneProperties properties) {
         if (properties.getUsername() == null || properties.getPassword() == null) {
             throw new IllegalStateException("AIS_CONTROL_DB_USERNAME and AIS_CONTROL_DB_PASSWORD are required");
@@ -35,22 +55,53 @@ public class ControlPlaneConfiguration {
         return new HikariDataSource(config);
     }
 
+    /**
+     * Creates the Flyway migrator whose only migration location is {@code db/control}.
+     *
+     * @param controlDataSource datasource for the separately owned control database
+     * @return a Flyway instance invoked through its {@code migrate} lifecycle method
+     */
     @Bean(initMethod = "migrate") Flyway controlPlaneFlyway(HikariDataSource controlDataSource) {
         return Flyway.configure().dataSource(controlDataSource).locations("classpath:db/control").load();
     }
 
+    /**
+     * Creates the SQL client used by control-plane repositories after Flyway has initialized.
+     *
+     * @param controlDataSource control-plane datasource
+     * @param controlPlaneFlyway initialization dependency that guarantees migration ordering
+     * @return a JDBC client bound only to the control database
+     */
     @Bean JdbcClient controlJdbcClient(HikariDataSource controlDataSource, Flyway controlPlaneFlyway) {
         return JdbcClient.create(controlDataSource);
     }
 
+    /**
+     * Exposes the JDBC-backed tenant catalog used for trusted host and datasource resolution.
+     *
+     * @param controlJdbcClient client connected to the control database
+     * @return the tenant catalog adapter
+     */
     @Bean TenantCatalog tenantCatalog(JdbcClient controlJdbcClient) {
         return new JdbcTenantCatalog(controlJdbcClient);
     }
 
+    /**
+     * Exposes a persistent, database-enforced one-time nonce store.
+     *
+     * @param controlJdbcClient client connected to the control database
+     * @return the nonce store used by handoff-token verification
+     */
     @Bean NonceStore nonceStore(JdbcClient controlJdbcClient) {
         return new JdbcNonceStore(controlJdbcClient);
     }
 
+    /**
+     * Reports control-plane database availability without touching any tenant datasource.
+     *
+     * @param controlJdbcClient client used for the lightweight {@code select 1} probe
+     * @return a health indicator that reports {@code UP} or preserves the failure as {@code DOWN}
+     */
     @Bean HealthIndicator controlPlaneHealthIndicator(JdbcClient controlJdbcClient) {
         return () -> {
             try {

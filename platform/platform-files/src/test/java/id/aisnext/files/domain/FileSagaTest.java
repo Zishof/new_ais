@@ -9,7 +9,13 @@ import java.time.Instant;
 import java.util.UUID;
 import org.junit.jupiter.api.Test;
 
+/** Unit tests for retry and terminal-state behavior of the file saga. */
 class FileSagaTest {
+    /** Creates the file-saga domain test. */
+    FileSagaTest() {
+    }
+
+    /** Proves retry counting without XA and rejects transitions out of a terminal state. */
     @Test void supportsRetryWithoutXaAndRejectsTerminalTransitions() {
         Instant now = Instant.parse("2026-09-03T00:00:00Z");
         FileSaga saga = new FileSaga(UUID.randomUUID(), new TenantId("tenant-a"), "document:1",

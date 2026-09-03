@@ -9,12 +9,29 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Repository;
 
+/**
+ * JDBC implementation of the minimal legacy identity read contract.
+ *
+ * <p>Queries are parameterized, route through the current tenant's read-only CORE datasource, and
+ * intentionally omit password columns.</p>
+ */
 @Repository
 public class JdbcLegacyIdentityQuery implements LegacyIdentityQuery {
     private final JdbcClient core;
 
+    /**
+     * Creates the adapter with the tenant-aware CORE client.
+     *
+     * @param core JDBC client routed by trusted {@code TenantContext}
+     */
     public JdbcLegacyIdentityQuery(@Qualifier("coreJdbcClient") JdbcClient core) { this.core = core; }
 
+    /**
+     * Reads one enabled account from {@code public.tbmuser} and normalizes its assigned roles.
+     *
+     * @param userId exact user identifier bound as a SQL parameter
+     * @return active account projection, or empty when absent or disabled
+     */
     @Override public Optional<LegacyUserAccount> findActiveUser(String userId) {
         return core.sql("""
                 select userid, coalesce(nullif(btrim(usernama), ''), userid) display_name,

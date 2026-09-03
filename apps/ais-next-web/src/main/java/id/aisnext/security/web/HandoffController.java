@@ -15,16 +15,36 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+/**
+ * Converts a valid, one-time legacy handoff token into an AIS Next authenticated HTTP session.
+ *
+ * <p>The controller never accepts a tenant from request parameters. It requires the token tenant
+ * to equal the trusted-host tenant established earlier in the filter chain.</p>
+ */
 @Controller
 public class HandoffController {
     private final HandoffTokenService tokens;
     private final SecurityContextRepository repository;
 
+    /**
+     * Creates the handoff endpoint.
+     *
+     * @param tokens token verifier and nonce consumer
+     * @param repository repository used to persist the new security context
+     */
     public HandoffController(HandoffTokenService tokens, SecurityContextRepository repository) {
         this.tokens = tokens;
         this.repository = repository;
     }
 
+    /**
+     * Verifies and consumes a handoff token, rotates the session ID, and redirects to the dashboard.
+     *
+     * @param token signed, short-lived, one-time handoff token
+     * @param request current servlet request containing the trusted tenant context
+     * @param response response used for errors, session cookie, and redirect
+     * @throws IOException if the servlet container cannot send an error or redirect
+     */
     @GetMapping("/auth/handoff")
     public void handoff(@RequestParam String token, HttpServletRequest request,
                         HttpServletResponse response) throws IOException {
