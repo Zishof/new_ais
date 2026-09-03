@@ -73,9 +73,11 @@
       "LEGACY_MENU_881247_UPDATE",
       "LEGACY_MENU_881247_DELETE"
     ],
-    "observedRoles": ["am", "amp", "kpsk"],
-    "activeObservedRole": "am",
-    "cloneFixtureRequired": false
+    "rolesWithPrivilegeRow": ["am", "amp", "kpsk"],
+    "rolesWithEffectiveMenuAssignment": ["amp", "kpsk"],
+    "activeRoleWithEffectiveMenuAssignment": null,
+    "cloneFixtureRequired": true,
+    "cloneFixture": "activate amp and assign it as admin.user_role2 only in the UAT clone"
   },
   "compatibility": {
     "newNullActiveMeansActive": true,

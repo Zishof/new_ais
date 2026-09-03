@@ -6,8 +6,8 @@ function handoffUrl(): string | undefined {
   if (!signingKey) return undefined;
   const encode = (value: string) => Buffer.from(value, 'utf8').toString('base64url');
   const payload = [
-    'v1', encode('ais-legacy'), encode('ais-next'), encode('local'),
-    encode('admin'), encode('am'), encode(randomUUID().replaceAll('-', '')),
+    'v1', encode('ais-legacy'), encode('ais-next'), encode(process.env.AIS_E2E_TENANT ?? 'local'),
+    encode('admin'), encode(process.env.AIS_E2E_ROLE ?? 'am'), encode(randomUUID().replaceAll('-', '')),
     String(Math.floor(Date.now() / 1000) + 300)
   ].join('.');
   const signature = createHmac('sha256', signingKey).update(payload).digest('base64url');

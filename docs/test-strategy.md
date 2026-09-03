@@ -17,6 +17,12 @@
 - Handoff token rejects expiration/tampering and consumes a nonce once.
 - File saga validates state transitions.
 - The localhost smoke test queries role data through a read-only tenant datasource.
+- The Phase 3 school-type slice runs only on an isolated CORE/FILE clone pair and leaves `local`
+  route ownership on `LEGACY` with a read-only source descriptor.
+- School-type tests cover exact privilege negatives, paging/filter/sort, responsive WCAG scans,
+  create/update/delete, stale ETag rejection, referenced-row conflict, Excel bounds/formula
+  rejection, Envers revision types, source fingerprint invariance, and restart-persistent route
+  rollback.
 
 ## Required before first write slice
 
@@ -24,3 +30,7 @@
 - Complete table and legacy getter/side-effect mapping for the selected aggregate.
 - Privilege-negative, optimistic concurrency, audit-equivalence and rollback tests.
 - Product owner UAT signature and current artifact hash.
+
+The technical clone UAT now satisfies all automated items above. Production promotion remains
+blocked on product-owner sign-off, live ZK/cache reverse-visibility evidence, independent
+control-audit/outbox design, and the cold-start performance outlier.

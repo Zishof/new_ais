@@ -47,7 +47,11 @@ Changing it is therefore externally visible even though the table contains no pe
 
 Menu `881247`, label `Jenis Sekolah`, owns the legacy route
 `/pages/master/sekolah/jenis_sekolah.zul`. Roles `am`, `amp`, and `kpsk` have all six legacy
-privileges. Only `am` is active and it is assigned to active users in the inspected database.
+privilege rows. However, effective authorization also requires `job_has_menu`: only `amp` and
+`kpsk` have that menu assignment, and both roles are inactive. `am` is active and assigned to
+active users but lacks the `job_has_menu` row, so it does not receive an effective authority.
+Clone UAT therefore activates `amp` and assigns it to `admin.user_role2`; the source remains
+unchanged.
 
 AIS Next maps read/create/update/delete independently to `LEGACY_MENU_881247_<ACTION>`. Export
 requires READ. Import is allowed only when CREATE, UPDATE, and DELETE are all present, matching the

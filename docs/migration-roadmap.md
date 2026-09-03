@@ -12,10 +12,12 @@
 | 7 — Finance/payment | Accounting and payment only after maturity | Reconciliation, security and rollback sign-off |
 | 8 — Retirement | Remove legacy routes one at a time | Traffic zero, retention/archive and rollback window expired |
 
-This iteration implements Phase 0 deliverables, Phase 1 foundation, and the complete Phase 2
-read-only identity slice: active-user/assigned-role handoff validation, server-derived menu
-authorities, dashboard/profile/search, role list/detail, tenant route gating, accessibility and
-rollback rehearsal. It does not enable a write endpoint. Local performance evidence records one
-startup-budget outlier that must be re-measured on the target UAT infrastructure. The next
-recommended slice is an organization reference master chosen jointly with the business owner and
-tested only against clones.
+This iteration implements Phase 0 deliverables, Phase 1 foundation, the complete Phase 2 read-only
+identity slice, and a technical Phase 3 UAT candidate for `sekolah.jenis_sekolah`. The write route
+is enabled only for the isolated `uat-local` clone; the normal `local` tenant remains read-only and
+returns 404 for organization routes. The slice includes server-side paging/filter/sort, independent
+legacy privileges, optimistic ETags, Envers-compatible atomic audit, and bounded Excel flow.
+
+Phase 3 is not production-complete. Product-owner acceptance, a running ZK/cache reverse-visibility
+test, an independent control-audit/outbox design, and remediation/re-measurement of cold startup
+remain exit gates.

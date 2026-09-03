@@ -2,12 +2,12 @@ import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
 import { createHmac, randomUUID } from 'node:crypto';
 
-function handoffUrl(userId = 'admin', activeRoleId = 'am'): string | undefined {
+function handoffUrl(userId = 'admin', activeRoleId = process.env.AIS_E2E_ROLE ?? 'am'): string | undefined {
   const signingKey = process.env.AIS_E2E_HANDOFF_SIGNING_KEY;
   if (!signingKey) return undefined;
   const encode = (value: string) => Buffer.from(value, 'utf8').toString('base64url');
   const payload = [
-    'v1', encode('ais-legacy'), encode('ais-next'), encode('local'),
+    'v1', encode('ais-legacy'), encode('ais-next'), encode(process.env.AIS_E2E_TENANT ?? 'local'),
     encode(userId), encode(activeRoleId), encode(randomUUID().replaceAll('-', '')),
     String(Math.floor(Date.now() / 1000) + 300)
   ].join('.');
@@ -40,7 +40,7 @@ test('authenticated profile remains credential-free and accessible', async ({ pa
   await page.goto('/profile');
   await expect(page.getByRole('heading', { name: 'Profil pengguna' })).toBeVisible();
   await expect(page.getByRole('code')).toHaveText('admin');
-  await expect(page.locator('dd').filter({ hasText: /^am$/ }).first()).toBeVisible();
+  await expect(page.locator('dd').filter({ hasText: new RegExp(`^${process.env.AIS_E2E_ROLE ?? 'am'}$`) }).first()).toBeVisible();
   await expect(page.getByText(/tidak memuat password/i)).toBeVisible();
   const results = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21aa', 'wcag22aa']).analyze();
   expect(results.violations).toEqual([]);
