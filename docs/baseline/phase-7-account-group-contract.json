@@ -1,0 +1,67 @@
+{
+  "phase": 7,
+  "module": "finance",
+  "capability": "account-group-directory",
+  "legacyMenu": {
+    "id": 36332,
+    "label": "Setup Grup Akun",
+    "url": "/pages/master/akunting/grupakun.zul",
+    "readAuthority": "LEGACY_MENU_36332_READ"
+  },
+  "routes": [
+    "/finance/account-groups",
+    "/api/v1/finance/account-groups"
+  ],
+  "defaultRouteDecision": {
+    "owner": "LEGACY",
+    "writeOwnership": "LEGACY_WRITE"
+  },
+  "uatRouteDecision": {
+    "owner": "NEXT",
+    "writeOwnership": "NEXT_READ_ONLY"
+  },
+  "sourceRelations": [
+    "akunting.grup_akun",
+    "public.job_has_menu",
+    "public.role_privilage",
+    "public.tbmrole"
+  ],
+  "responseFields": [
+    "accountGroupId",
+    "name",
+    "description"
+  ],
+  "excludedFields": [
+    "oleh",
+    "olehid",
+    "tanggal_dirubah"
+  ],
+  "request": {
+    "page": "zero-based integer",
+    "size": "integer 1..100",
+    "q": "trimmed case-insensitive literal name fragment"
+  },
+  "predicates": [
+    "account-group name is non-null and nonblank",
+    "active role has effective legacy menu 36332 read authority"
+  ],
+  "ordering": [
+    "name ASC",
+    "accountGroupId ASC"
+  ],
+  "baseline": {
+    "capturedAt": "2026-09-04",
+    "sourceRows": 7,
+    "eligibleRows": 7,
+    "schemaFingerprintMd5": "29c7870af4432e79b47da260d410c07b",
+    "projectionFingerprintMd5": "7cbbb5cceddc4bf0e3a697f9fdf474e6",
+    "sourceCloneParity": true
+  },
+  "writePolicy": "SELECT_ONLY",
+  "productionGates": [
+    "finance-owner-acceptance",
+    "independent-security-and-reconciliation-review",
+    "operations-readiness",
+    "target-environment-performance"
+  ]
+}
