@@ -19,5 +19,6 @@ This repository depends on open-source libraries managed by Maven and includes t
 | JUnit / AssertJ / ArchUnit | Spring Boot/Modulith managed | EPL-2.0 / Apache-2.0 / Apache-2.0 | Test dependencies |
 | Playwright Test | 1.62.1 | Apache-2.0 | Browser test dependency |
 | axe-core Playwright | 4.13.0 | MPL-2.0 | Accessibility test dependency |
+| Apache POI OOXML | 5.5.1 | Apache-2.0 | Bounded `.xlsx` import/export for Phase 3 master data |
 
 The allowlist is policy, not a substitute for legal review. GPL/AGPL, SSPL, BUSL, unknown or commercial licenses require explicit review and a separate decision before introduction.

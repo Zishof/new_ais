@@ -11,6 +11,10 @@ server:
 spring:
   application:
     name: ais-next
+  servlet:
+    multipart:
+      max-file-size: 1MB
+      max-request-size: 1MB
   modulith:
     detection-strategy: explicitly-annotated
   jpa:

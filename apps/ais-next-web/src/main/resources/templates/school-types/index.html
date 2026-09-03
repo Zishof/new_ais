@@ -11,7 +11,7 @@
   <nav aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="/dashboard">Dasbor</a></li><li class="breadcrumb-item active">Jenis sekolah</li></ol></nav>
   <div class="page-header d-flex flex-wrap align-items-center justify-content-between gap-2">
     <div><h1 class="page-title">Jenis sekolah</h1><p class="text-secondary mb-0">Master global instalasi · kompatibel dengan AIS Legacy</p></div>
-    <a class="btn btn-primary" href="/school-types/new" th:if="${canCreateSchoolTypes}">Tambah jenis sekolah</a>
+    <div class="d-flex flex-wrap gap-2"><a class="btn btn-outline-primary" href="/school-types/export.xlsx">Unduh Excel</a><a class="btn btn-primary" href="/school-types/new" th:if="${canCreateSchoolTypes}">Tambah jenis sekolah</a></div>
   </div>
   <div class="alert alert-success mt-3" role="status" th:if="${success}" th:text="${success}">Berhasil</div>
   <div class="alert alert-danger mt-3" role="alert" th:if="${error}" th:text="${error}">Gagal</div>
@@ -24,6 +24,12 @@
       </select></div>
       <div class="col-12 col-md-2"><label class="form-check"><input class="form-check-input" type="checkbox" name="activeOnly" value="true" th:checked="${activeOnly}"><span class="form-check-label">Hanya aktif</span></label></div>
       <div class="col-12 col-md-2"><button class="btn btn-primary w-100" type="submit">Terapkan</button></div>
+    </div></div>
+  </form>
+  <form class="card card-sm mt-3" method="post" action="/school-types/import" enctype="multipart/form-data" th:if="${canCreateSchoolTypes and canUpdateSchoolTypes and canDeleteSchoolTypes}">
+    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"><div class="card-body"><div class="row g-2 align-items-end">
+      <div class="col-12 col-md-9"><label class="form-label" for="workbook">Impor Excel hasil ekspor</label><input id="workbook" name="file" class="form-control" type="file" accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" required><div class="form-hint">Maksimal 1 MiB dan 1.000 baris. Seluruh file disimpan atau dibatalkan sebagai satu transaksi.</div></div>
+      <div class="col-12 col-md-3"><button class="btn btn-outline-primary w-100" type="submit">Impor Excel</button></div>
     </div></div>
   </form>
   <div class="card mt-3"><div class="table-responsive"><table class="table table-vcenter card-table">

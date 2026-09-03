@@ -30,6 +30,15 @@ public interface SchoolTypeRepository {
     Optional<SchoolType> findById(long id);
 
     /**
+     * Returns the complete bounded catalogue in deterministic name order for workbook export.
+     *
+     * @param maximumRows hard upper bound protecting memory and workbook size
+     * @return ordered school-type projections
+     * @throws SchoolTypeValidationException when the catalogue exceeds the bound
+     */
+    List<SchoolType> findAllForExport(int maximumRows);
+
+    /**
      * Returns active levels plus inactive levels already referenced by a school type.
      *
      * @return deterministic level choices safe for legacy data editing

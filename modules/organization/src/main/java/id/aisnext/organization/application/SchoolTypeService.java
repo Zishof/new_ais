@@ -80,6 +80,56 @@ public class SchoolTypeService {
     }
 
     /**
+     * Returns a complete bounded catalogue for `.xlsx` export.
+     *
+     * @return at most 1,000 rows in deterministic name order
+     * @throws SchoolTypeValidationException when the catalogue exceeds the workbook bound
+     */
+    @Transactional(transactionManager = "coreTransactionManager", readOnly = true)
+    public List<SchoolType> exportRows() {
+        return repository.findAllForExport(1_000);
+    }
+
+    /**
+     * Applies one workbook as a single transaction after requiring strict bulk ownership.
+     *
+     * <p>Rows without IDs create data; rows with IDs require their exported concurrency tokens.
+     * Any failure rolls back every business and Envers row in the workbook.</p>
+     *
+     * @param rows parsed workbook rows, limited by the codec
+     * @param actorId authenticated legacy user identifier
+     * @return committed create/update counters
+     * @throws SchoolTypeValidationException when input is empty or a row is invalid
+     * @throws SchoolTypeConflictException when any name or version conflicts
+     * @throws SchoolTypeNotFoundException when an update identifier is missing
+     */
+    @Transactional(transactionManager = "coreTransactionManager")
+    public SchoolTypeImportResult importRows(List<SchoolTypeImportRow> rows, String actorId) {
+        requireNextWrite();
+        if (rows == null || rows.isEmpty()) {
+            throw new SchoolTypeValidationException("Workbook tidak memiliki baris data");
+        }
+        if (rows.size() > 1_000) {
+            throw new SchoolTypeValidationException("Workbook maksimal 1000 baris data");
+        }
+        String actor = requireActor(actorId);
+        int created = 0;
+        int updated = 0;
+        for (SchoolTypeImportRow row : rows) {
+            SchoolTypeCommand normalized = normalize(row.command());
+            requireUniqueName(normalized.name(), row.id());
+            if (row.id() == null) {
+                repository.create(normalized, actor);
+                created++;
+            } else {
+                repository.update(row.id(), row.versionToken(), normalized, actor);
+                updated++;
+            }
+        }
+        return new SchoolTypeImportResult(created, updated);
+    }
+
+    /**
      * Creates one school type after ownership and business validation.
      *
      * @param command untrusted submitted fields

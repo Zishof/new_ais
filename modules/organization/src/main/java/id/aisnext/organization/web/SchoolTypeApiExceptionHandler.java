@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 /** Maps expected school-type failures to stable, non-sensitive HTTP responses. */
-@RestControllerAdvice(assignableTypes = SchoolTypeApiController.class)
+@RestControllerAdvice(assignableTypes = {SchoolTypeApiController.class, SchoolTypeWorkbookController.class})
 public class SchoolTypeApiExceptionHandler {
     /** Creates the stateless API exception mapper. */
     public SchoolTypeApiExceptionHandler() {

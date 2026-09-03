@@ -14,6 +14,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.security.web.context.SecurityContextRepository;
@@ -23,6 +24,7 @@ import org.springframework.security.web.context.SecurityContextRepository;
  * headers.
  */
 @Configuration(proxyBeanMethods = false)
+@EnableMethodSecurity
 public class SecurityConfiguration {
     /**
      * Creates the Spring configuration definition for authentication and browser security.
@@ -70,6 +72,8 @@ public class SecurityConfiguration {
                         .requestMatchers("/api/openapi.json", "/api/docs/**", "/swagger-ui/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/school-types/new").hasAuthority(CREATE)
                         .requestMatchers(HttpMethod.GET, "/school-types/*/edit").hasAuthority(UPDATE)
+                        .requestMatchers(HttpMethod.POST, "/school-types/import",
+                                "/api/v1/school-types/import").authenticated()
                         .requestMatchers(HttpMethod.POST, "/school-types").hasAuthority(CREATE)
                         .requestMatchers(HttpMethod.POST, "/school-types/*/delete").hasAuthority(DELETE)
                         .requestMatchers(HttpMethod.POST, "/school-types/*").hasAuthority(UPDATE)

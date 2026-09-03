@@ -9,6 +9,7 @@ import id.aisnext.organization.api.SchoolTypeSort;
 import id.aisnext.organization.domain.SchoolTypeConflictException;
 import id.aisnext.organization.domain.SchoolTypeNotFoundException;
 import id.aisnext.organization.domain.SchoolTypeRepository;
+import id.aisnext.organization.domain.SchoolTypeValidationException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
@@ -77,6 +78,25 @@ public class JdbcSchoolTypeRepository implements SchoolTypeRepository {
     public Optional<SchoolType> findById(long id) {
         return core.sql(SELECT_COLUMNS + " where js.id = :id")
                 .param("id", id).query(this::map).optional();
+    }
+
+    /**
+     * Loads an explicitly bounded export and fails instead of silently truncating excess rows.
+     *
+     * @param maximumRows positive export row bound
+     * @return complete ordered catalogue within the bound
+     * @throws SchoolTypeValidationException when more rows exist than the configured maximum
+     */
+    @Override
+    public List<SchoolType> findAllForExport(int maximumRows) {
+        List<SchoolType> values = core.sql(SELECT_COLUMNS
+                        + " order by lower(js.nama), js.id limit :limit")
+                .param("limit", Math.addExact(maximumRows, 1)).query(this::map).list();
+        if (values.size() > maximumRows) {
+            throw new SchoolTypeValidationException(
+                    "Ekspor dibatasi " + maximumRows + " baris; gunakan filter atau proses batch");
+        }
+        return List.copyOf(values);
     }
 
     /**
