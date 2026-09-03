@@ -26,4 +26,8 @@ rollback, and two controlled recovery checks, PID 31940 used 177,764 KiB of a 27
 G1 heap. This passes the initial local startup and idle-heap budgets but is not target-environment
 load evidence.
 
+The Phase 6 artifact started in 18.390 seconds and used 88,426 KiB of a 221,184 KiB committed G1
+heap after browser, rollback, and recovery checks. It remains within the initial local budgets,
+although the startup margin is narrower and target-environment measurement remains mandatory.
+
 When active tenant concurrency approaches PostgreSQL limits, put PgBouncer in transaction-pooling mode after validating prepared statements, session variables and read-only initialization. Continue bounding application pools; PgBouncer is not permission to multiply them.
