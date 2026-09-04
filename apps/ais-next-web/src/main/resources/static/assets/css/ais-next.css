@@ -285,7 +285,8 @@ a { text-underline-offset: .18em; }
 }
 
 .ais-public-page::before { position: fixed; inset: 0; pointer-events: none; content: ""; opacity: .16; background-image: linear-gradient(rgba(255,255,255,.11) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.11) 1px, transparent 1px); background-size: 48px 48px; mask-image: linear-gradient(to bottom, #000, transparent 75%); }
-.ais-public-shell { position: relative; width: min(74rem, 100%); margin: auto; padding: clamp(1.25rem, 4vw, 3rem); }
+.ais-public-page #main-content { display: block; min-height: 100vh; }
+.ais-public-shell { position: relative; width: min(74rem, 100%); min-height: 100vh; margin: 0 auto; padding: clamp(1.25rem, 4vw, 3rem); }
 .ais-public-brand { display: flex; align-items: center; gap: .85rem; margin-bottom: clamp(2rem, 6vw, 5rem); }
 .ais-public-brand .ais-brand-mark { width: 3rem; height: 3rem; background: rgba(255, 255, 255, .13); border: 1px solid rgba(255, 255, 255, .2); box-shadow: none; backdrop-filter: blur(8px); }
 .ais-public-brand h1 { margin: 0; color: #fff; font-size: 1.2rem; font-weight: 850; letter-spacing: -.02em; }
