@@ -1,17 +1,54 @@
 <!doctype html>
-<html lang="id">
+<html lang="id" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>AIS Next</title><link rel="stylesheet" href="/assets/vendor/tabler/css/tabler.min.css">
+  <meta name="description" content="AIS Next — ruang kerja layanan pendidikan modern yang terhubung aman dengan AIS Legacy">
+  <title>AIS Next · Ruang kerja pendidikan</title>
+  <link rel="stylesheet" href="/assets/vendor/tabler/css/tabler.min.css">
   <link rel="stylesheet" href="/assets/css/ais-next.css">
 </head>
-<body class="d-flex flex-column">
-<main class="page page-center"><div class="container container-tight py-4">
-  <div class="card card-md"><div class="card-body text-center">
-    <h1 class="h2">AIS Next</h1>
-    <p class="text-secondary">Aplikasi modern berjalan berdampingan dengan AIS legacy.</p>
-    <p>Masuk melalui handoff satu-kali dari AIS legacy. Session legacy tidak disalin.</p>
-  </div></div>
-</div></main>
+<body class="ais-public-page d-flex flex-column">
+<a class="ais-skip-link" href="#main-content">Lewati ke konten utama</a>
+<main id="main-content" tabindex="-1" class="page page-center">
+  <div class="ais-public-shell">
+    <header class="ais-public-brand">
+      <span class="ais-brand-mark" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M12 3 3.5 7.5 12 12l8.5-4.5L12 3Z" fill="currentColor"/><path d="M6 10.2v4.9c0 1.6 2.7 3.4 6 3.4s6-1.8 6-3.4v-4.9L12 13.4 6 10.2Z" fill="currentColor" opacity=".78"/></svg>
+      </span>
+      <div><h1>AIS Next</h1><p>Platform pendidikan terpadu</p></div>
+    </header>
+
+    <div class="ais-public-grid">
+      <section class="ais-public-copy" aria-labelledby="public-intro-title">
+        <span class="ais-public-kicker">Modern · Aman · Bertahap</span>
+        <h2 id="public-intro-title">Satu ruang kerja untuk layanan pendidikan.</h2>
+        <p>Akses akademik, sekolah, kehadiran, perpustakaan, dan keuangan melalui pengalaman yang
+          lebih ringkas—tanpa memutus kesinambungan AIS yang sudah berjalan.</p>
+        <div class="ais-public-actions">
+          <a class="btn btn-primary" th:href="${legacyLoginUrl}">Masuk melalui AIS Legacy <span aria-hidden="true">→</span></a>
+          <a class="btn btn-outline-light" href="#alur-masuk">Pelajari alur aman</a>
+        </div>
+        <ul class="ais-trust-list" aria-label="Jaminan keamanan sesi">
+          <li>Handoff satu kali</li><li>Sesi terisolasi</li><li>Tanpa password duplikat</li>
+        </ul>
+      </section>
+
+      <aside class="ais-entry-card" id="alur-masuk" aria-labelledby="entry-title">
+        <h2 id="entry-title">Cara masuk ke AIS Next</h2>
+        <p>Identitas dan hak akses tetap diverifikasi oleh sumber resmi institusi.</p>
+        <ol class="ais-entry-steps">
+          <li><strong>Masuk di AIS Legacy</strong>Gunakan akun institusi seperti biasa.</li>
+          <li><strong>Pilih peran aktif</strong>Menu hanya tampil sesuai kewenangan peran tersebut.</li>
+          <li><strong>Buka AIS Next</strong>Handoff sekali pakai membentuk sesi baru yang aman.</li>
+        </ol>
+      </aside>
+    </div>
+
+    <footer class="ais-public-footer">
+      <span>AIS Next berjalan berdampingan dengan AIS Legacy.</span>
+      <span>Data dan route dimigrasikan secara terukur.</span>
+    </footer>
+  </div>
+</main>
 </body>
 </html>

@@ -1,30 +1,66 @@
 <!doctype html>
 <html lang="id" xmlns:th="http://www.thymeleaf.org">
 <body>
-<header th:fragment="topbar" class="navbar navbar-expand-md d-print-none">
+<header th:fragment="topbar" class="navbar navbar-expand-lg ais-app-header d-print-none">
+  <a class="ais-skip-link" href="#main-content">Lewati ke konten utama</a>
   <div class="container-xl">
-    <a class="navbar-brand" href="/dashboard">AIS Next</a>
-    <nav class="d-flex flex-wrap align-items-center" aria-label="Navigasi utama">
-      <a class="nav-link" href="/dashboard">Dasbor</a>
-      <a class="nav-link" href="/profile">Profil</a>
-      <a class="nav-link" href="/roles" th:if="${canReadRoleDirectory}">Grup pengguna</a>
-      <a class="nav-link" href="/school-types" th:if="${canReadSchoolTypes}">Jenis sekolah</a>
-      <a class="nav-link" href="/attendance/daily" th:if="${canReadDailyAttendance}">Kehadiran harian</a>
-      <a class="nav-link" href="/academic/students" th:if="${canReadStudentDirectory}">Direktori siswa</a>
-      <a class="nav-link" href="/supporting/library/item-types" th:if="${canReadLibraryItemTypes}">Jenis item perpustakaan</a>
-      <a class="nav-link" href="/finance/account-groups" th:if="${canReadAccountGroups}">Grup akun</a>
-    </nav>
-    <form class="d-flex ms-md-auto me-2" method="get" action="/search" th:if="${canReadRoleDirectory}">
-      <label class="visually-hidden" for="global-search">Pencarian global</label>
-      <input id="global-search" class="form-control form-control-sm" name="q"
-             minlength="2" placeholder="Cari fitur atau data" required>
-      <button class="btn btn-primary btn-sm ms-1" type="submit">Cari</button>
-    </form>
-    <form method="post" action="/logout">
-      <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
-      <button class="btn btn-outline-secondary btn-sm" type="submit">Keluar</button>
-    </form>
+    <div class="ais-header-top">
+      <a class="ais-brand" href="/dashboard" aria-label="AIS Next — Dasbor">
+        <span class="ais-brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M12 3 3.5 7.5 12 12l8.5-4.5L12 3Z" fill="currentColor"/><path d="M6 10.2v4.9c0 1.6 2.7 3.4 6 3.4s6-1.8 6-3.4v-4.9L12 13.4 6 10.2Z" fill="currentColor" opacity=".78"/></svg>
+        </span>
+        <span class="ais-brand-copy"><span class="ais-brand-name">AIS Next</span><span class="ais-brand-tagline">Education workspace</span></span>
+      </a>
+
+      <form class="ais-global-search ais-global-search-desktop" method="get" action="/search"
+            th:if="${canReadRoleDirectory}" role="search">
+        <label class="visually-hidden" for="global-search">Pencarian global</label>
+        <input id="global-search" class="form-control" name="q" minlength="2"
+               placeholder="Cari fitur atau data" required>
+        <button class="btn btn-primary btn-sm" type="submit">Cari</button>
+      </form>
+
+      <div class="ais-header-actions">
+        <a class="btn btn-outline-secondary" href="/profile" title="Buka profil pengguna">
+          <span aria-hidden="true">◎</span><span class="ais-profile-label">Profil</span>
+        </a>
+        <form method="post" action="/logout">
+          <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+          <button class="btn btn-outline-secondary" type="submit" title="Keluar dari AIS Next">
+            <span aria-hidden="true">↗</span><span class="visually-hidden">Keluar</span>
+          </button>
+        </form>
+      </div>
+
+      <button class="ais-nav-toggle" type="button" data-bs-toggle="collapse"
+              data-bs-target="#ais-primary-navigation" aria-controls="ais-primary-navigation"
+              aria-expanded="false" aria-label="Buka atau tutup menu utama">
+        <span class="ais-nav-toggle-lines" aria-hidden="true"></span><span>Menu utama</span>
+      </button>
+    </div>
+
+    <div class="collapse ais-nav-collapse" id="ais-primary-navigation">
+      <form class="ais-global-search ais-mobile-search" method="get" action="/search"
+            th:if="${canReadRoleDirectory}" role="search">
+        <label class="visually-hidden" for="mobile-global-search">Pencarian global</label>
+        <input id="mobile-global-search" class="form-control" name="q" minlength="2"
+               placeholder="Cari fitur atau data" required>
+        <button class="btn btn-primary btn-sm" type="submit">Cari</button>
+      </form>
+      <nav class="ais-primary-nav" aria-label="Navigasi utama">
+        <a class="ais-nav-link" href="/dashboard" data-ais-route="/dashboard"><span class="ais-nav-icon" aria-hidden="true">D</span>Dasbor</a>
+        <a class="ais-nav-link" href="/profile" data-ais-route="/profile"><span class="ais-nav-icon" aria-hidden="true">P</span>Profil</a>
+        <a class="ais-nav-link" href="/roles" data-ais-route="/roles" th:if="${canReadRoleDirectory}"><span class="ais-nav-icon" aria-hidden="true">G</span>Grup pengguna</a>
+        <a class="ais-nav-link" href="/school-types" data-ais-route="/school-types" th:if="${canReadSchoolTypes}"><span class="ais-nav-icon" aria-hidden="true">S</span>Jenis sekolah</a>
+        <a class="ais-nav-link" href="/attendance/daily" data-ais-route="/attendance" th:if="${canReadDailyAttendance}"><span class="ais-nav-icon" aria-hidden="true">K</span>Kehadiran</a>
+        <a class="ais-nav-link" href="/academic/students" data-ais-route="/academic" th:if="${canReadStudentDirectory}"><span class="ais-nav-icon" aria-hidden="true">A</span>Direktori siswa</a>
+        <a class="ais-nav-link" href="/supporting/library/item-types" data-ais-route="/supporting" th:if="${canReadLibraryItemTypes}"><span class="ais-nav-icon" aria-hidden="true">L</span>Perpustakaan</a>
+        <a class="ais-nav-link" href="/finance/account-groups" data-ais-route="/finance" th:if="${canReadAccountGroups}"><span class="ais-nav-icon" aria-hidden="true">F</span>Grup akun</a>
+      </nav>
+    </div>
   </div>
+  <script src="/assets/vendor/tabler/js/tabler.min.js"></script>
+  <script defer src="/assets/js/ais-next.js"></script>
 </header>
 </body>
 </html>

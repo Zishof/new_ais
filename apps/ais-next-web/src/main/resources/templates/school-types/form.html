@@ -6,7 +6,7 @@
   <link rel="stylesheet" href="/assets/vendor/tabler/css/tabler.min.css"><link rel="stylesheet" href="/assets/css/ais-next.css">
 </head>
 <body><header th:replace="~{fragments/navigation :: topbar}"></header>
-<main class="page-wrapper"><div class="container-xl py-4">
+<main id="main-content" tabindex="-1" class="page-wrapper"><div class="container-xl py-4">
   <nav aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="/dashboard">Dasbor</a></li><li class="breadcrumb-item"><a href="/school-types">Jenis sekolah</a></li><li class="breadcrumb-item active" th:text="${item == null ? 'Tambah' : 'Ubah'}">Form</li></ol></nav>
   <div class="page-header"><h1 class="page-title" th:text="${item == null ? 'Tambah jenis sekolah' : 'Ubah jenis sekolah'}">Jenis sekolah</h1></div>
   <form class="card mt-3" method="post" th:action="${item == null} ? @{/school-types} : @{/school-types/{id}(id=${item.id})}">

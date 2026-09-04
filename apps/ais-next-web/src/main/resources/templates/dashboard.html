@@ -2,17 +2,44 @@
 <html lang="id" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Dasbor · AIS Next</title><link rel="stylesheet" href="/assets/vendor/tabler/css/tabler.min.css">
-  <link rel="stylesheet" href="/assets/css/ais-next.css"><script defer src="/assets/vendor/htmx/htmx.min.js"></script>
+  <title>Dasbor · AIS Next</title>
+  <link rel="stylesheet" href="/assets/vendor/tabler/css/tabler.min.css">
+  <link rel="stylesheet" href="/assets/css/ais-next.css">
 </head>
 <body><header th:replace="~{fragments/navigation :: topbar}"></header>
-<main class="page-wrapper"><div class="container-xl py-4">
-  <nav aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item active">Dasbor</li></ol></nav>
-  <div class="page-header"><h1 class="page-title">Selamat datang</h1></div>
-  <div class="row row-cards mt-1">
-    <div class="col-sm-6"><div class="card"><div class="card-body"><div class="subheader">Tenant</div><div class="h2" th:text="${tenant.displayName}">AIS Local</div></div></div></div>
-    <div class="col-sm-6"><div class="card"><div class="card-body"><div class="subheader">Mode</div><div class="h2" th:text="${tenant.mode}">HYBRID</div></div></div></div>
+<main id="main-content" tabindex="-1" class="page-wrapper"><div class="container-xl py-4">
+  <nav aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item active" aria-current="page">Dasbor</li></ol></nav>
+
+  <section class="ais-dashboard-hero" aria-labelledby="dashboard-title">
+    <span class="ais-eyebrow">Ruang kerja utama</span>
+    <h1 id="dashboard-title" th:text="|Selamat datang, ${principal.name}|">Selamat datang di AIS Next</h1>
+    <p>Pilih layanan yang Anda perlukan. Isi menu dan data selalu mengikuti tenant serta peran aktif
+      yang diverifikasi saat handoff.</p>
+    <div class="ais-hero-meta">
+      <span class="ais-hero-chip"><span aria-hidden="true">●</span><span th:text="${tenant.displayName}">AIS Local</span></span>
+      <span class="ais-hero-chip"><span aria-hidden="true">◇</span><span th:text="${principal.activeRoleId}">Role aktif</span></span>
+      <span class="ais-hero-chip"><span aria-hidden="true">✓</span>Sesi terverifikasi</span>
+    </div>
+  </section>
+
+  <div class="ais-section-heading">
+    <div><h2>Layanan tersedia</h2><p>Modul ditampilkan berdasarkan hak akses peran aktif Anda.</p></div>
+    <a href="/profile">Lihat profil akses <span aria-hidden="true">→</span></a>
   </div>
-  <div class="alert alert-info mt-3" role="status">Slice pertama bersifat read-only. Database legacy tidak menerima DDL atau write dari layar ini.</div>
+  <section class="ais-module-grid" aria-label="Daftar layanan AIS Next">
+    <a class="ais-module-card" href="/roles" th:if="${canReadRoleDirectory}"><span class="ais-module-icon">G</span><span class="ais-module-arrow" aria-hidden="true">↗</span><span class="ais-module-title">Grup pengguna</span><span class="ais-module-description">Tinjau peran, menu, dan privilege Legacy.</span></a>
+    <a class="ais-module-card" href="/school-types" th:if="${canReadSchoolTypes}"><span class="ais-module-icon">S</span><span class="ais-module-arrow" aria-hidden="true">↗</span><span class="ais-module-title">Jenis sekolah</span><span class="ais-module-description">Kelola referensi jenis sekolah yang kompatibel.</span></a>
+    <a class="ais-module-card" href="/attendance/daily" th:if="${canReadDailyAttendance}"><span class="ais-module-icon">K</span><span class="ais-module-arrow" aria-hidden="true">↗</span><span class="ais-module-title">Kehadiran harian</span><span class="ais-module-description">Pantau pencatatan kehadiran pegawai.</span></a>
+    <a class="ais-module-card" href="/academic/students" th:if="${canReadStudentDirectory}"><span class="ais-module-icon">A</span><span class="ais-module-arrow" aria-hidden="true">↗</span><span class="ais-module-title">Direktori siswa</span><span class="ais-module-description">Temukan data akademik minimum siswa.</span></a>
+    <a class="ais-module-card" href="/supporting/library/item-types" th:if="${canReadLibraryItemTypes}"><span class="ais-module-icon">L</span><span class="ais-module-arrow" aria-hidden="true">↗</span><span class="ais-module-title">Perpustakaan</span><span class="ais-module-description">Lihat referensi klasifikasi koleksi.</span></a>
+    <a class="ais-module-card" href="/finance/account-groups" th:if="${canReadAccountGroups}"><span class="ais-module-icon">F</span><span class="ais-module-arrow" aria-hidden="true">↗</span><span class="ais-module-title">Grup akun</span><span class="ais-module-description">Lihat referensi grup akun tanpa nilai transaksi.</span></a>
+  </section>
+
+  <div class="ais-stat-grid" aria-label="Konteks sesi">
+    <div class="card ais-stat-card"><span class="ais-module-icon" aria-hidden="true">T</span><div><div class="ais-stat-label">Tenant aktif</div><div class="ais-stat-value" th:text="${tenant.displayName}">AIS Local</div></div></div>
+    <div class="card ais-stat-card"><span class="ais-module-icon" aria-hidden="true">M</span><div><div class="ais-stat-label">Mode migrasi</div><div class="ais-stat-value" th:text="${tenant.mode}">HYBRID</div></div></div>
+  </div>
+
+  <div class="alert alert-info mt-3" role="status">AIS Next hanya melayani route yang sudah disetujui. Fitur lain tetap tersedia melalui AIS Legacy selama masa transisi.</div>
 </div></main><div id="a11y-live" class="visually-hidden" aria-live="polite"></div>
 </body></html>

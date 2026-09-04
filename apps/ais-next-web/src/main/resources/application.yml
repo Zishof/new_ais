@@ -49,6 +49,8 @@ springdoc:
     path: /api/docs
 
 ais:
+  legacy:
+    login-url: ${AIS_LEGACY_LOGIN_URL:http://localhost:18080/ais/login}
   control:
     enabled: ${AIS_CONTROL_ENABLED:true}
     jdbc-url: ${AIS_CONTROL_DB_URL:jdbc:postgresql://localhost:5432/ais_next_control}
