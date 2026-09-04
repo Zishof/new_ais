@@ -43,8 +43,12 @@ public class HomeController {
      * @return Thymeleaf template name for the dashboard
      */
     @GetMapping("/dashboard") String dashboard(Principal principal, ResolvedTenant tenant, Model model) {
-        model.addAttribute("tenant", tenant);
-        model.addAttribute("principal", principal instanceof HandoffPrincipal hp ? hp : principal);
+        model.addAttribute("userDisplayName", principal.getName());
+        model.addAttribute("activeRoleId", principal instanceof HandoffPrincipal hp
+                ? hp.activeRoleId()
+                : "Peran terverifikasi");
+        model.addAttribute("tenantDisplayName", tenant.displayName());
+        model.addAttribute("tenantMode", tenant.mode().name());
         return "dashboard";
     }
 }

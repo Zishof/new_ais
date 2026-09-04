@@ -12,12 +12,12 @@
 
   <section class="ais-dashboard-hero" aria-labelledby="dashboard-title">
     <span class="ais-eyebrow">Ruang kerja utama</span>
-    <h1 id="dashboard-title" th:text="|Selamat datang, ${principal.name}|">Selamat datang di AIS Next</h1>
+    <h1 id="dashboard-title" th:text="|Selamat datang, ${userDisplayName}|">Selamat datang di AIS Next</h1>
     <p>Pilih layanan yang Anda perlukan. Isi menu dan data selalu mengikuti tenant serta peran aktif
       yang diverifikasi saat handoff.</p>
     <div class="ais-hero-meta">
-      <span class="ais-hero-chip"><span aria-hidden="true">●</span><span th:text="${tenant.displayName}">AIS Local</span></span>
-      <span class="ais-hero-chip"><span aria-hidden="true">◇</span><span th:text="${principal.activeRoleId}">Role aktif</span></span>
+      <span class="ais-hero-chip"><span aria-hidden="true">●</span><span th:text="${tenantDisplayName}">AIS Local</span></span>
+      <span class="ais-hero-chip"><span aria-hidden="true">◇</span><span th:text="${activeRoleId}">Role aktif</span></span>
       <span class="ais-hero-chip"><span aria-hidden="true">✓</span>Sesi terverifikasi</span>
     </div>
   </section>
@@ -36,8 +36,8 @@
   </section>
 
   <div class="ais-stat-grid" aria-label="Konteks sesi">
-    <div class="card ais-stat-card"><span class="ais-module-icon" aria-hidden="true">T</span><div><div class="ais-stat-label">Tenant aktif</div><div class="ais-stat-value" th:text="${tenant.displayName}">AIS Local</div></div></div>
-    <div class="card ais-stat-card"><span class="ais-module-icon" aria-hidden="true">M</span><div><div class="ais-stat-label">Mode migrasi</div><div class="ais-stat-value" th:text="${tenant.mode}">HYBRID</div></div></div>
+    <div class="card ais-stat-card"><span class="ais-module-icon" aria-hidden="true">T</span><div><div class="ais-stat-label">Tenant aktif</div><div class="ais-stat-value" th:text="${tenantDisplayName}">AIS Local</div></div></div>
+    <div class="card ais-stat-card"><span class="ais-module-icon" aria-hidden="true">M</span><div><div class="ais-stat-label">Mode migrasi</div><div class="ais-stat-value" th:text="${tenantMode}">HYBRID</div></div></div>
   </div>
 
   <div class="alert alert-info mt-3" role="status">AIS Next hanya melayani route yang sudah disetujui. Fitur lain tetap tersedia melalui AIS Legacy selama masa transisi.</div>

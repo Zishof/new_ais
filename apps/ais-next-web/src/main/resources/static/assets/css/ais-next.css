@@ -188,6 +188,7 @@ a { text-underline-offset: .18em; }
 .page-header { min-height: auto; padding: .25rem 0 .35rem; }
 .page-title { color: var(--ais-ink); font-size: clamp(1.55rem, 2vw, 2.05rem); font-weight: 800; letter-spacing: -.035em; line-height: 1.15; }
 .page-header .text-secondary, .page-header p { max-width: 52rem; margin-top: .45rem; font-size: .94rem; line-height: 1.55; }
+.text-secondary { color: #5b6b82 !important; }
 
 .card {
   overflow: hidden;
@@ -304,11 +305,11 @@ a { text-underline-offset: .18em; }
 .ais-trust-list { display: flex; flex-wrap: wrap; gap: .55rem; margin-top: 1.6rem; padding: 0; list-style: none; }
 .ais-trust-list li { display: inline-flex; align-items: center; gap: .4rem; color: rgba(255,255,255,.78); font-size: .78rem; font-weight: 650; }
 .ais-trust-list li::before { width: .45rem; height: .45rem; content: ""; background: #63e6be; border-radius: 50%; box-shadow: 0 0 0 .22rem rgba(99,230,190,.13); }
-.ais-entry-card { padding: clamp(1.35rem, 3vw, 2rem); background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.18); border-radius: var(--ais-radius-lg); box-shadow: 0 24px 65px rgba(0,0,0,.24); backdrop-filter: blur(16px); }
+.ais-entry-card { padding: clamp(1.35rem, 3vw, 2rem); background: #244a84; border: 1px solid #46699d; border-radius: var(--ais-radius-lg); box-shadow: 0 24px 65px rgba(0,0,0,.24); }
 .ais-entry-card h2 { margin: 0; color: #fff; font-size: 1.2rem; font-weight: 800; }
-.ais-entry-card > p { margin: .4rem 0 1.35rem; color: rgba(255,255,255,.63); line-height: 1.55; }
+.ais-entry-card > p { margin: .4rem 0 1.35rem; color: #d5e2f5; line-height: 1.55; }
 .ais-entry-steps { display: grid; gap: .8rem; margin: 0; padding: 0; counter-reset: entry; list-style: none; }
-.ais-entry-steps li { position: relative; min-height: 4.2rem; padding: .9rem .9rem .9rem 3.4rem; color: rgba(255,255,255,.82); background: rgba(5,21,49,.3); border: 1px solid rgba(255,255,255,.11); border-radius: .9rem; line-height: 1.45; }
+.ais-entry-steps li { position: relative; min-height: 4.2rem; padding: .9rem .9rem .9rem 3.4rem; color: #dbe8f8; background: #173b72; border: 1px solid #3c6196; border-radius: .9rem; line-height: 1.45; }
 .ais-entry-steps li::before { position: absolute; top: .85rem; left: .85rem; display: grid; width: 1.8rem; height: 1.8rem; place-items: center; counter-increment: entry; content: counter(entry); color: #0b2c63; background: #fff; border-radius: .6rem; font-size: .75rem; font-weight: 850; }
 .ais-entry-steps strong { display: block; margin-bottom: .15rem; color: #fff; }
 .ais-public-footer { display: flex; flex-wrap: wrap; justify-content: space-between; gap: .75rem; margin-top: clamp(2rem, 5vw, 4rem); color: rgba(255,255,255,.5); font-size: .76rem; }
