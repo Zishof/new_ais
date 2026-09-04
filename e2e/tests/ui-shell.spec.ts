@@ -48,6 +48,7 @@ test('authenticated dashboard exposes role-scoped modules and responsive navigat
   await page.goto(url!);
   await expect(page).toHaveURL(/\/dashboard$/);
   await expect(page.getByRole('heading', { name: /Selamat datang/ })).toBeVisible();
+  await expect(page.getByText(process.env.AIS_E2E_ROLE ?? 'amp', { exact: true })).toBeVisible();
   await expect(page.getByRole('region', { name: 'Daftar layanan AIS Next' })).toBeVisible();
   await expect(page.getByRole('link', { name: /Grup akun/ }).last()).toBeVisible();
 
@@ -55,8 +56,13 @@ test('authenticated dashboard exposes role-scoped modules and responsive navigat
   if (viewport && viewport.width < 992) {
     await page.getByRole('button', { name: 'Buka atau tutup menu utama' }).click();
   }
-  await expect(page.getByRole('navigation', { name: 'Navigasi utama' })).toBeVisible();
-  await expect(page.getByRole('navigation', { name: 'Navigasi utama' })
+  const navigation = page.getByRole('navigation', { name: 'Navigasi utama' });
+  await expect(navigation).toBeVisible();
+  if (viewport && viewport.width < 992) {
+    const navigationBox = await navigation.boundingBox();
+    expect(navigationBox?.width).toBeGreaterThan(viewport.width - 48);
+  }
+  await expect(navigation
     .getByRole('link', { name: 'Dasbor' })).toHaveAttribute('aria-current', 'page');
 
   const accessibility = await new AxeBuilder({ page })

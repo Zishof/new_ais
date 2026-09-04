@@ -63,6 +63,8 @@ a { text-underline-offset: .18em; }
   backdrop-filter: blur(14px);
 }
 
+.ais-app-header > .container-xl { display: block; }
+
 .ais-header-top {
   display: flex;
   min-height: 4.5rem;
